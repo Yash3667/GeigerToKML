@@ -21,7 +21,7 @@ def checkArguments (arguments):
     else:
         return -1
 
-def openFile (fileName):
+def getInformationFromFile (fileName):
     """
     Tries to open file in read mode
     and gets a list of all the different
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         print "Error. Not Enough Arguments"
         exit(1)
 
-    fileList = openFile (sys.argv[1])
+    fileList = getInformationFromFile (sys.argv[1])
     if  fileList == -1:
         exit(1)
     else:
