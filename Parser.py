@@ -37,12 +37,10 @@ def getInformationFromFile (fileName):
     [1]: Radiation in the last five seconds
     [2]: Radiation total count since start up
     [3]: Radiation Count Validity Flag
-    [4]: Latitude in ddmm.mmmm (dd -> degrees; mm.mmmm -> minutes)
-    [5]: Hemisphere for Latitude
-    [6]: Longitude in dddmm.mmmm (ddd -> degrees; mm.mmmm -> minutes)
-    [7]: Hemisphere for Londitude
-    [8]: Altitude
-    [9]: GPS Location Validity Flag
+    [4]: Longitude in Decimal Notation
+    [5]: Latitude in Decimal Notation
+    [6]: Altitude
+    [7]: GPS Location Validity Flag
     """
 
     fileList = []
@@ -56,19 +54,75 @@ def getInformationFromFile (fileName):
     else:
         fileContent = fileContent.splitlines()
 
+        # Get only relevant lines and split into serparate token from the LOG file
         for line in fileContent:
             if line[0] == '$':
                 fileList.append(line.split(","))
 
+        # Remove unwanted tokens from each line
         for i in range (len (fileList)):
             fileList[i] = fileList[i][3:-2]
 
+            # Get Decimal Latitude and Longitude
+            """
+            The LOG file gives these notations. These need to be changed
+            to decimal notation.
+
+            Google KML needs longitude first, so it makes more sense to
+            place it earlier in the list rather than later.
+            """
+            longitude = convertToDecimal(fileList[i][6], fileList[i][7]) # Longitude is the 7th Element and its Hemisphere is the 8th
+            latitude  = convertToDecimal(fileList[i][4], fileList[i][5]) # Latitude is the 5th Element and its Hemisphere is the 6th
+
+            # Change Values in List and remove Hemisphere Orientation
+            fileList[i][4] = str(longitude)
+            fileList[i][6] = str(latitude)
+            del fileList[i][5]
+            del fileList[i][6] # Remove 6 and not 7 because there is one less element now
+
     return fileList
+
+def convertToDecimal(point, hemisphere):
+    """
+    Take a latitude or longitude in LOG File
+    notation and return a decimal notation
+    depending on the hemisphere
+
+    Formula
+    Decimal = Degree + (Minutes / 60)
+
+    Parameters
+    point      (String): Point Notation according to log
+    hemisphere (String): Hemisphere orientation for point
+    """
+
+    # Orientation is negative for W and S and positive for N and E
+    orientation = 1
+
+    if hemisphere in ("N", "S"):
+        degree = int(point[0:2])
+        minute = float(point[2:])
+
+        # Set Orientation
+        if hemisphere == "S":
+            orientation = -1
+    elif hemisphere in ("E", "W"):
+        degree = int(point[0:3])
+        minute = float(point[3:])
+
+        # Set Orientation
+        if hemisphere == "W":
+            orientation = -1
+
+    # Apply Formula
+    decimal = (degree + (minute / 60)) * orientation
+
+    return decimal
 
 """ Script Execution """
 
 # Run Forward only if called directly
-# Prints all lines in log file beginning with '$'
+# Prints all lines
 if __name__ == "__main__":
     check = checkArguments(sys.argv)
     if check:
