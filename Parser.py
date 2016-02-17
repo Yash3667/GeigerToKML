@@ -32,7 +32,7 @@ def getInformationFromFile (fileName):
     Parameters
     fileName (String): Path to LOG File
 
-    Attributes for the returned list
+    Element Index's for the returned list
     [0]: Radiation in the last minute
     [1]: Radiation in the last five seconds
     [2]: Radiation total count since start up
@@ -124,7 +124,7 @@ def convertToDecimal(point, hemisphere):
 # Run Forward only if called directly
 # Prints all lines
 if __name__ == "__main__":
-    check = checkArguments(sys.argv)
+    check = checkArguments (sys.argv)
     if check:
         print "Error. Not Enough Arguments"
         exit(1)
