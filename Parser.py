@@ -71,12 +71,12 @@ def getInformationFromFile (fileName):
             Google KML needs longitude first, so it makes more sense to
             place it earlier in the list rather than later.
             """
-            longitude = convertToDecimal(fileList[i][6], fileList[i][7]) # Longitude is the 7th Element and its Hemisphere is the 8th
-            latitude  = convertToDecimal(fileList[i][4], fileList[i][5]) # Latitude is the 5th Element and its Hemisphere is the 6th
+            longitude = convertToDecimal (fileList[i][6], fileList[i][7]) # Longitude is the 7th Element and its Hemisphere is the 8th
+            latitude  = convertToDecimal (fileList[i][4], fileList[i][5]) # Latitude is the 5th Element and its Hemisphere is the 6th
 
             # Change Values in List and remove Hemisphere Orientation
-            fileList[i][4] = str(longitude)
-            fileList[i][6] = str(latitude)
+            fileList[i][4] = str (longitude)
+            fileList[i][6] = str (latitude)
             del fileList[i][5]
             del fileList[i][6] # Remove 6 and not 7 because there is one less element now
 
@@ -100,15 +100,15 @@ def convertToDecimal(point, hemisphere):
     orientation = 1
 
     if hemisphere in ("N", "S"):
-        degree = int(point[0:2])
-        minute = float(point[2:])
+        degree = int (point[0:2])
+        minute = float (point[2:])
 
         # Set Orientation
         if hemisphere == "S":
             orientation = -1
     elif hemisphere in ("E", "W"):
-        degree = int(point[0:3])
-        minute = float(point[3:])
+        degree = int (point[0:3])
+        minute = float (point[3:])
 
         # Set Orientation
         if hemisphere == "W":
