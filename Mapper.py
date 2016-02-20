@@ -12,28 +12,8 @@ NOTE:	Nothing in here has been tested yet.
 		The names for the above methods can be
 		modified, they are simply suggestions.
 """
+import Milestones
 
-# NOTE:	These values are TEMPORARY, pending further investigation
-# Trivial corresponds to Green
-#trivialDose 	= 
-#trivialPeriod	=
-
-# Notable corresponds to Yellow
-#notableDose	= 
-#notablePeriod	= 
-
-# Medium corresponds to Orange
-#mediumDose		=
-#mediumPeriod	=
-
-# High corresponds to Red
-#highDose		=
-#highPeriod		=
-"""
-The above variables are tunable parameters that control when
-milestone colors are reached (see documentation for further 
-details). 
-"""
 
 trivialCPM 	= convertToCPM(trivialDose, trivialPeriod)
 notableCPM 	= convertToCPM(notableDose, notablePeriod)
@@ -47,8 +27,8 @@ def convertToCPM(dose, period):
 	Converts from milliSieverts/hr to CPM 
 
 	Parameters:
-	dose (double): The dosage
-	period (double): The time period over which the dosage4
+	dose 	(double): The dosage
+	period 	(double): The time period over which the dosage4
 					 is administered
 
 	Returns the measurement in CPM
@@ -65,7 +45,7 @@ def mapData(data):
 	(color dependent on radiation levels)
 
 	Parameters:
-	data (List): A list of parsed log entries
+	data 	(List): A list of parsed log entries
 	"""
 
 	# Handle datasets of a single entry
@@ -107,7 +87,7 @@ def getPoint(entry):
 	Extracts the latitude and longitude from a data entry
 
 	Parameters:
-	entry (List): A single parsed log entry
+	entry 	(List): A single parsed log entry
 	"""
 	return [entry[4], entry[5]]
 
@@ -115,43 +95,44 @@ def getPoint(entry):
 def avgRadColor(radOne, radTwo):
 	"""
 	Averages two radiation colors.
-	Decodes from an 8 digit hexademical ARGB string
+	Decodes from an 8 digit hexademical ABGR string
 
 	Parameters:
-	radOne (String): A 32 bit ARGB hex string
-	radTwo (String): A 32 bit ARGB hex string
+	radOne 	(String): A 32 bit ABGR hex string
+	radTwo 	(String): A 32 bit ABGR hex string
 
-	Returns an 8 digit hexadecimal ARGB string
+	Returns an 8 digit hexadecimal ABGR string
 	"""
 	alpha = (int(radOne[:2], 16) + int(radTwo[:2], 16)) // 2
 	alpha = hex(alpha)[2:].zfill(2)
 
-	red = (int(radOne[2:4], 16) + int(radTwo[2:4], 16)) // 2
-	red = hex(red)[2:].zfill(2)
+	blue = (int(radOne[2:4], 16) + int(radTwo[2:4], 16)) // 2
+	blue = hex(red)[2:].zfill(2)
 
 	green = (int(radOne[4:6], 16) + int(radTwo[4:6], 16)) // 2
 	green = hex(green)[2:].zfill(2)
 
-	blue = (int(radOne[6:8], 16) + int(radTwo[6:8], 16)) // 2
-	blue = hex(blue)[2:].zfill(2)
+	red = (int(radOne[6:8], 16) + int(radTwo[6:8], 16)) // 2
+	red = hex(red)[2:].zfill(2)
 	
-	return alpha + red + blue + green
+	return alpha + blue + green + red
 
 
 def calcRadColor(entry):
 	"""
-	Calculates the color for a given 
-
-	Uses a 32 bit ARGB color scheme in accordance with KML
+	Calculates the color for a given entry
+	Uses a 32 bit ABGR color scheme in accordance with KML
 
 	Parameters:
-	entry (List): A single parsed log entry
+	entry 	(List): A single parsed log entry
+
+	Returns an 8 digit hexadecimal ABGR string
 	"""
 	alpha 	= calcAlpha(int(entry[1]))
 	red 	= calcRed(int(entry[1]))
 	green	= calcGreen(int(entry[1]))
 	blue	= calcBlue(int(entry[1]))
-	return alpha + red + blue + green
+	return alpha + blue + green + red
 
 
 """
@@ -161,10 +142,11 @@ See documentation for details about color calculations
 def calcRed(radlvl):
 	"""
 	Calculates the level of Red
-	Returns a 2 digit hexadecimal string
 
 	Parameters:
-	radlvl (int): The radiation level in CPM
+	radlvl 	(int): The radiation level in CPM
+
+	Returns a 2 digit hexadecimal string
 	"""
 	if radlvl =< trivialCPM:
 		red = 0
@@ -179,12 +161,13 @@ def calcRed(radlvl):
 def calcGreen(radlvl):
 	"""
 	Calculates the level of Green.
-	Returns a 2 digit hexadecimal string
 
 	Parameters:
-	radlvl (int): The radiation level in CPM
+	radlvl 	(int): The radiation level in CPM
+
+	Returns a 2 digit hexadecimal string
 	"""
-	if radlvl =< notableCPM:
+	if radlvl <= notableCPM:
 		green = 255
 	elif radlvl <= mediumCPM:
 		green = 256 - (radlvl - notableCPM) * 128 // (mediumCPM - notableCPM)
@@ -197,10 +180,11 @@ def calcGreen(radlvl):
 def calcBlue(radlvl):
 	"""
 	Calculates the level of Blue
-	Returns a 2 digit hexadecimal string
 
 	Parameters:
-	radlvl (int): The radiation level in CPM
+	radlvl 	(int): The radiation level in CPM
+
+	Returns a 2 digit hexadecimal string
 	"""
 	# No blue in Green, Yellow, or Red
 	blue = 0
@@ -210,10 +194,11 @@ def calcBlue(radlvl):
 def calcAlpha(radlvl):
 	"""
 	Calculates the level of Alpha
-	Returns a 2 digit hexadecimal string
 
 	Parameters:
-	radlvl (int): The radiation level in CPM
+	radlvl 	(int): The radiation level in CPM
+
+	Returns a 2 digit hexadecimal string
 	"""
 	# Fully opaque
 	alpha = 255
