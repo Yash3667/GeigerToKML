@@ -12,3 +12,10 @@
 - The milestones are tunable variables held in Mapper.py. Each milestone is calculated using two tunable constants: 
 	* Dosage (milliSieverts): The dosage.
 	* Period (hours): The time period over which the dosage is administered.
+- Current milestones:
+	* Trivial (Green): Average global public exposure (3 mSv/yr)
+	* Notable (Yellow): Long term public safety limit (130 mSv/yr)
+	* Medium (Orange): Threshold for maintaining evacuation (700 mSv/yr)
+	* High (Red): Provisional safety levels after a RECENT radiological incident (170 mSv/week)
+
+Current milestones chosen using data from http://world-nuclear.org/information-library/safety-and-security/radiation-and-health/nuclear-radiation-and-health-effects.aspx

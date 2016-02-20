@@ -2,7 +2,8 @@
 Module for parsing SAFECAST Geiger Counter LOG Files
 into a Python List.
 
-Returning -1 represents error.
+Returning -1 represents IOError
+Returning  1 represents Data Error
 """
 
 import sys
@@ -49,15 +50,28 @@ def getInformationFromFile (fileName):
         with open (fileName, "r") as logFile:
             fileContent = logFile.read()
     except IOError:
-        print "Parser couldn't open file specified"
         return -1
     else:
         fileContent = fileContent.splitlines()
 
+        if len(fileContent) == 0:
+            return 1
+        else:
+            """
+            print fileContent
+            print
+            """
+
         # Get only relevant lines and split into serparate token from the LOG file
         for line in fileContent:
-            if line[0] == '$':
-                fileList.append(line.split(","))
+            #print line
+            if len(line):
+                if line[0] == '$': # Makes sure only LOG files are used
+                    fileList.append(line.split(","))
+
+        # Check for zero number of lines
+        if len (fileList) == 0:
+            return 1
 
         # Remove unwanted tokens from each line
         for i in range (len (fileList)):
