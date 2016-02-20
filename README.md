@@ -6,7 +6,7 @@ Module for XML Processing: LXML
 A test script is placed in the repository to be used as a flashcard for the module methods.
 
 The module is built for LOG files produced by the SAFECAST Geiger Counter. Sample test LOGS can be  
-found in "Test LOGS".  
+found in "Tests/Test Logs".  
 
 Team  
 1. Matthew Gray  
