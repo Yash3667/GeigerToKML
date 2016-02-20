@@ -1,3 +1,5 @@
+# Colors
+
 - The color of each path is calculated depending on the average radiation level between points on the path (the minimum number of points on a path is 2, and consecutive points that have the same color are placed on a single path).
 - Recommended milestones are:
 	* Green should be trivial levels of radiation.
