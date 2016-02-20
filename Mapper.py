@@ -28,9 +28,9 @@ def mapData(data):
 		radColor = avgRadColor(radOne, radTwo)
 
 		# Extract the lat and long and put them on the path
-		path.append(data[0])
+		path.append(getPoint(data[0]))
 		del data[0]
-		path.append(data[0])
+		path.append(getPoint(data[0]))
 
 		# Add additional points to the path, if applicable
 		while len(data) > 1:
