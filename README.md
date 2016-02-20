@@ -11,5 +11,4 @@ found in "Test LOGS".
 Team  
 1. Matthew Gray  
 2. Justin Raizes  
-3. Arjun Govindjee  
-4. Yash Gupta  
+3. Yash Gupta  
