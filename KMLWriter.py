@@ -35,8 +35,10 @@ def endKML(fileName):
       File.write(XML_STR)
 
 
-initKML()
-makeLine([[100, 59], [100, 50.00394857394857]], "7f0000ff")
-endKML("TestFile")
+
+# example use of code
+# initKML()
+# makeLine([[100, 59], [100, 50.00394857394857]], "7f0000ff")
+# endKML("TestFile")
 
 
