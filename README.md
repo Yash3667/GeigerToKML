@@ -12,3 +12,6 @@ Team
 1. Matthew Gray  
 2. Justin Raizes  
 3. Yash Gupta  
+  
+Instructions  
+python Converter.py [OPTION] [FILE]
