@@ -11,7 +11,7 @@ along with the parameters
 import sys
 import getopt
 import Parser
-#import Mapper
+import Mapper
 import KMLWriter
 
 def printUsage():
