@@ -52,7 +52,7 @@ def getPoint(entry):
 	Parameters:
 	entry 	(List): A single parsed log entry
 	"""
-	return [entry[4], entry[5]]
+	return [float(entry[4]), float(entry[5])]
 
 
 def avgRadColor(radOne, radTwo):
