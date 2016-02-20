@@ -1,5 +1,6 @@
 """
 NOTE:	Nothing in here has been tested yet.
+		This file is not currently complete
 
 		The functions in this file depend on
 		the following functions which are to 
@@ -13,12 +14,19 @@ NOTE:	Nothing in here has been tested yet.
 """
 
 # NOTE:	These values are TEMPORARY, pending further investigation
+# Trivial corresponds to Green
+#trivialDose 	= 
+#trivialPeriod	=
+
+# Notable corresponds to Yellow
 #notableDose	= 
 #notablePeriod	= 
 
+# Medium corresponds to Orange
 #mediumDose		=
 #mediumPeriod	=
 
+# High corresponds to Red
 #highDose		=
 #highPeriod		=
 """
@@ -26,6 +34,29 @@ The above variables are tunable parameters that control when
 milestone colors are reached (see documentation for further 
 details). 
 """
+
+trivialCPM 	= convertToCPM(trivialDose, trivialPeriod)
+notableCPM 	= convertToCPM(notableDose, notablePeriod)
+mediumCPM	= convertToCPM(mediumDose, mediumPeriod)
+highCPM 	= convertToCPM(highDose, highPeriod)
+
+
+
+def convertToCPM(dose, period):
+	"""
+	Converts from milliSieverts/hr to CPM 
+
+	Parameters:
+	dose (double): The dosage
+	period (double): The time period over which the dosage4
+					 is administered
+
+	Returns the measurement in CPM
+	"""
+	conversionFactor = 350000 / 1.0
+	return conversionFactor * dose / period
+
+
 
 	
 def mapData(data):
@@ -84,7 +115,7 @@ def getPoint(entry):
 def avgRadColor(radOne, radTwo):
 	"""
 	Averages two radiation colors.
-	Decodes from a 32 bit ARGB color scheme
+	Decodes from an 8 digit hexademical ARGB string
 
 	Parameters:
 	radOne (String): A 32 bit ARGB hex string
@@ -124,8 +155,7 @@ def calcRadColor(entry):
 
 
 """
-Colors range from Green (low radiation) to Red (high radiation),
-with Yellow between them (medium radiation)
+See documentation for details about color calculations
 """
 
 def calcRed(radlvl):
@@ -136,10 +166,12 @@ def calcRed(radlvl):
 	Parameters:
 	radlvl (int): The radiation level in CPM
 	"""
-	if radlvl >= medium:
-		red = 255
+	if radlvl =< trivialCPM:
+		red = 0
+	elif radlvl <= mediumCPM:
+		red = (radlvl - trivialCPM) * 255 // (notableCPM - trivialCPM)
 	else:
-		red = radlvl * 255 // medium
+		red = 255
 
 	return hex(red)[2:].zfill(2)
 
@@ -152,10 +184,12 @@ def calcGreen(radlvl):
 	Parameters:
 	radlvl (int): The radiation level in CPM
 	"""
-	if radlvl =< medium:
+	if radlvl =< notableCPM:
 		green = 255
+	elif radlvl <= mediumCPM:
+		green = 256 - (radlvl - notableCPM) * 128 // (mediumCPM - notableCPM)
 	else:
-		green = (radlvl - medium) * 255 // high
+		green = 128 - (radlvl - mediumCPM) * 128 // (highCPM - mediumCPM)
 
 	return hex(green)[2:].zfill(2)
 

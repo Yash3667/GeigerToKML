@@ -1,0 +1,9 @@
+Documentation of the LOG Files
+-> https://github.com/Safecast/bGeigieMini
+-> https://github.com/Safecast/bGeigieNanoKit/wiki/Nano-Operation-Manual
+
+Converting Points into Decimal Degrees
+-> http://geoinfo.sdsu.edu/hightech/LM3/dd1.php
+
+SAFECAST provides a C API to access these LOGS simply. Do we want to wrap that around and build
+a python module for that C Code?
