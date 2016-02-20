@@ -83,12 +83,11 @@ if data == -1:
 elif data == 1:
     print "No Log Data Found in File"
     exit(1)
-"""
+
 # Map the data obtained from the log file
 Mapper.mapData (data)
 
 # Write all the data to the KML file
 KMLWriter.endKML (outputFile)
-"""
 
 """ END - Script Execution """
