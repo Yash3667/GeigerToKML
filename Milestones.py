@@ -31,7 +31,7 @@ def convertToCPM(dose, period):
 
 	Parameters:
 	dose 	(double): The dosage
-	period 	(double): The time period over which the dosage4
+	period 	(double): The time period over which the dosage
 					 is administered
 
 	Returns the measurement in CPM
