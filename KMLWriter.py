@@ -31,7 +31,7 @@ def makeLine(points,color,look=False):
 
 def endKML(fileName):
   XML_STR = ET.tostring(KMLTag, encoding = "UTF-8", xml_declaration = True, pretty_print = True)
-  with open(fileName+".kml", "w") as File:
+  with open(fileName, "w") as File:
       File.write(XML_STR)
 
 
