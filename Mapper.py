@@ -69,7 +69,7 @@ def avgRadColor(radOne, radTwo):
 	alpha = hex(alpha)[2:].zfill(2)
 
 	blue = (int(radOne[2:4], 16) + int(radTwo[2:4], 16)) // 2
-	blue = hex(red)[2:].zfill(2)
+	blue = hex(blue)[2:].zfill(2)
 
 	green = (int(radOne[4:6], 16) + int(radTwo[4:6], 16)) // 2
 	green = hex(green)[2:].zfill(2)
