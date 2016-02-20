@@ -1,44 +1,6 @@
-"""
-NOTE:	Nothing in here has been tested yet.
-		This file is not currently complete
-
-		The functions in this file depend on
-		the following functions which are to 
-		be implemented by Matthew:
-
-		-makeMarker(coordinates, color code)
-		-makePath(coordinate list, color code)
-
-		The names for the above methods can be
-		modified, they are simply suggestions.
-"""
-import Milestones
+from Milestones import *
 
 
-trivialCPM 	= convertToCPM(trivialDose, trivialPeriod)
-notableCPM 	= convertToCPM(notableDose, notablePeriod)
-mediumCPM	= convertToCPM(mediumDose, mediumPeriod)
-highCPM 	= convertToCPM(highDose, highPeriod)
-
-
-
-def convertToCPM(dose, period):
-	"""
-	Converts from milliSieverts/hr to CPM 
-
-	Parameters:
-	dose 	(double): The dosage
-	period 	(double): The time period over which the dosage4
-					 is administered
-
-	Returns the measurement in CPM
-	"""
-	conversionFactor = 350000 / 1.0
-	return conversionFactor * dose / period
-
-
-
-	
 def mapData(data):
 	"""
 	Segments the path into mini-paths of varying colors
@@ -148,14 +110,14 @@ def calcRed(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
-	if radlvl =< trivialCPM:
+	if radlvl <= trivialCPM:
 		red = 0
-	elif radlvl <= mediumCPM:
+	elif radlvl <= notableCPM:
 		red = (radlvl - trivialCPM) * 255 // (notableCPM - trivialCPM)
 	else:
 		red = 255
 
-	return hex(red)[2:].zfill(2)
+	return hex(int(red))[2:].zfill(2)
 
 
 def calcGreen(radlvl):
@@ -170,11 +132,13 @@ def calcGreen(radlvl):
 	if radlvl <= notableCPM:
 		green = 255
 	elif radlvl <= mediumCPM:
-		green = 256 - (radlvl - notableCPM) * 128 // (mediumCPM - notableCPM)
-	else:
+		green = 255 - (radlvl - notableCPM) * 128 // (mediumCPM - notableCPM)
+	elif radlvl <= highCPM:
 		green = 128 - (radlvl - mediumCPM) * 128 // (highCPM - mediumCPM)
+	else: 
+		green = 0
 
-	return hex(green)[2:].zfill(2)
+	return hex(int(green))[2:].zfill(2)
 
 
 def calcBlue(radlvl):
