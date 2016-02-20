@@ -1,4 +1,4 @@
-# Geiger TO KML
+# Geiger To KML
 
 Python module for translating Geiger Counter Mappings in a Google Earth KML File based on Paths.  
 
