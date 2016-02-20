@@ -34,7 +34,7 @@ def mapData(data):
 
 		# Add additional points to the path, if applicable
 		while len(data) > 1:
-			path.append(data[0])
+			path.append(getPoint(data[0]))
 
 			if calcRadColor(data[1]) == radColor:
 				del data[0]
