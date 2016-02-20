@@ -69,6 +69,8 @@ for option, value in opts:
 # Make sure output file has a proper value. Input file will be handled by the Parser
 if outputFile == "":
     outputFile = "Untitled.kml"
+elif outputFile[-4:] != ".kml":
+    outputFile += ".kml"
 
 # Initialize the KML File
 KMLWriter.initKML ()
@@ -81,11 +83,12 @@ if data == -1:
 elif data == 1:
     print "No Log Data Found in File"
     exit(1)
-
+"""
 # Map the data obtained from the log file
 Mapper.mapData (data)
 
 # Write all the data to the KML file
 KMLWriter.endKML (outputFile)
+"""
 
 """ END - Script Execution """
