@@ -91,10 +91,10 @@ def calcRadColor(entry):
 
 	Returns an 8 digit hexadecimal ABGR string
 	"""
-	alpha 	= calcAlpha(int(entry[1]))
-	red 	= calcRed(int(entry[1]))
-	green	= calcGreen(int(entry[1]))
-	blue	= calcBlue(int(entry[1]))
+	alpha 	= calcAlpha(int(entry[0]))
+	red 	= calcRed(int(entry[0]))
+	green	= calcGreen(int(entry[0]))
+	blue	= calcBlue(int(entry[0]))
 	return alpha + blue + green + red
 
 
