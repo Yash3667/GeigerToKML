@@ -59,7 +59,7 @@ def endKML(fileName):
     Closes KML tree and writes it to a file
     Parameters
     fileName (string): the file you would like to write to
-                       example UCSCUpperCampus.kml
+                       ex: example.kml
     """
     XML_STR = ET.tostring(KMLTag, encoding = "UTF-8", xml_declaration = True, pretty_print = True)
     with open(fileName, "w") as File:
