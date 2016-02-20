@@ -40,7 +40,7 @@ def mapData(data):
 			else:
 				break
 
-		makePath(path, radColor)
+		makeLine(path, radColor)
 
 
 
