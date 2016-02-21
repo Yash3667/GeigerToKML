@@ -91,6 +91,7 @@ def getInformationFromFile (fileName):
             # Change Values in List and remove Hemisphere Orientation
             fileList[i][4] = str (longitude)
             fileList[i][6] = str (latitude)
+
             del fileList[i][5]
             del fileList[i][6] # Remove 6 and not 7 because there is one less element now
 

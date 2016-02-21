@@ -34,7 +34,7 @@ def makeLine(points,color):
     colorTag = ET.SubElement(LineStyle,"color")
     colorTag.text = color
     widthTag = ET.SubElement(LineStyle,"width")
-    widthTag.text = "2"
+    widthTag.text = "20"
 
     #This creates the Placemark that will cointain the LineString
     Placemark = ET.SubElement(Document, "Placemark")
@@ -71,5 +71,3 @@ if __name__ == "__main__":
     initKML()
     makeLine([[-112.0814237830345,36.10677870477137],[-112.0870267752693,36.0905099328766], [-112.0880267752693,36]], "7f0000ff")
     endKML("TestFile.kml")
-
-
