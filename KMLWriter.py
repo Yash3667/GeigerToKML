@@ -34,7 +34,7 @@ def makeLine(points,color):
     colorTag = ET.SubElement(LineStyle,"color")
     colorTag.text = color
     widthTag = ET.SubElement(LineStyle,"width")
-    widthTag.text = "20"
+    widthTag.text = "10"
 
     #This creates the Placemark that will cointain the LineString
     Placemark = ET.SubElement(Document, "Placemark")
