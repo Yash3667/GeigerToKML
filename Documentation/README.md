@@ -9,7 +9,13 @@
 	* Ranges above the aforementioned Red milestone are simply denoted as Red.
 - Colors range from Green (very low radiation), to Yellow (noteworthy radiation), to Orange (medium radiation) to Red (dangerous radiation). Corresponding graphs are shown below.
 
-![alt tag](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/colorComponents.png)
+	* Component distribution:
+
+![alt tag](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/ColorComponents.png)
+
+	* Visual color distribution using current milestones:
+
+![alt tag](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/ColorDistribution.png)
 
 - The milestones are tunable variables held in Mapper.py. Each milestone is calculated using two tunable constants: 
 	* Dosage (milliSieverts): The dosage.
