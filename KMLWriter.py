@@ -2,13 +2,16 @@
 Module for writing paths to a KML file.
 """
 
-def initKML():
+def initKML(widthLength = "10"):
     """
     Initializes KML tree and makes the
     """
     global ET
     global KMLTag
     global Document
+    global widthText
+
+    widthText = widthLength
 
     from lxml import etree as ET
 
@@ -34,7 +37,7 @@ def makeLine(points,color):
     colorTag = ET.SubElement(LineStyle,"color")
     colorTag.text = color
     widthTag = ET.SubElement(LineStyle,"width")
-    widthTag.text = "10"
+    widthTag.text = widthText
 
     #This creates the Placemark that will cointain the LineString
     Placemark = ET.SubElement(Document, "Placemark")

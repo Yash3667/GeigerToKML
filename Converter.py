@@ -28,11 +28,14 @@ def printUsage():
     print
     print "     -o               output file"
     print "     --output         "
+    print "     -w               width of path n kml"
+    print "     --width         "
     print
     print "Examples"
     print
     print "Converter -i LogFile.log -o KMLFile.kml"
     print "Converter -o KMLFile.kml -i LogFile.log"
+    print "Converted -i LogFile.log -w 10"
     print "Converter -i LogFile.log"
     print
     print "If Output File name is not specified, it takes"
@@ -43,6 +46,7 @@ def printUsage():
 
 logFile = ""
 outputFile = ""
+widthText = ""
 
 # Check for Minimum Arguments
 if Parser.checkArguments (sys.argv) == -1:
@@ -52,7 +56,7 @@ if Parser.checkArguments (sys.argv) == -1:
 else:
     # Get the arguments
     try:
-        opts, args = getopt.getopt (sys.argv[1:], "i:o:h", ["input=", "output=", "help"])
+        opts, args = getopt.getopt (sys.argv[1:], "i:o:w:h", ["input=", "output=", "width=", "help"])
     except getopt.GetoptError as err:
         print str(err)
         printUsage ()
@@ -65,6 +69,14 @@ for option, value in opts:
         logFile = value
     elif option in ("-o", "--output"):
         outputFile = value
+    elif option in ("-w", "--width"):
+        try:
+            intText = int (value)
+        except:
+            printUsage ()
+            exit(0)
+        else:
+            widthText = value
     else:
         print "Unknown Error"
         print
@@ -96,7 +108,10 @@ print "Logging In:", logFile
 print "Outputting:", outputFile
 
 # Initialize the KML File
-KMLWriter.initKML ()
+if widthText == "":
+    KMLWriter.initKML ()
+else:
+    KMLWriter.initKML (widthText)
 
 # Map the data obtained from the log file
 Mapper.mapData (data)
