@@ -33,6 +33,10 @@ def printUsage():
     print
     print "Converter -i LogFile.log -o KMLFile.kml"
     print "Converter -o KMLFile.kml -i LogFile.log"
+    print "Converter -i LogFile.log"
+    print
+    print "If Output File name is not specified, it takes"
+    print "on the name of the Log File (the path for the log file is not followed)"
     exit(0)
 
 """ Script Execution """
@@ -66,15 +70,6 @@ for option, value in opts:
         print
         printUsage ()
 
-# Make sure output file has a proper value. Input file will be handled by the Parser
-if outputFile == "":
-    outputFile = "Untitled.kml"
-elif outputFile[-4:] != ".kml":
-    outputFile += ".kml"
-
-# Initialize the KML File
-KMLWriter.initKML ()
-
 # Get the information from the log file
 data = Parser.getInformationFromFile (logFile)
 if data == -1:
@@ -83,6 +78,25 @@ if data == -1:
 elif data == 1:
     print "No Log Data Found in File"
     exit(1)
+
+# Make sure output file has a proper value. Input file will be handled by the Parser
+if outputFile == "":
+    """
+    Give it the same name as the logFile
+
+    Also, remove the path (if) trailing
+    the logFile by splicing from the last
+    occurence from '/'
+    """
+    outputFile = logFile[logFile.rfind("/") + 1:-4] + ".kml"
+elif outputFile[-4:] != ".kml":
+    outputFile += ".kml"
+
+print "Logging In:", logFile
+print "Outputting:", outputFile
+
+# Initialize the KML File
+KMLWriter.initKML ()
 
 # Map the data obtained from the log file
 Mapper.mapData (data)
