@@ -76,7 +76,7 @@ for option, value in opts:
             printUsage ()
             exit(0)
         else:
-            widthText = value
+            widthText = str (value)
     else:
         print "Unknown Error"
         print
