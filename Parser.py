@@ -34,14 +34,15 @@ def getInformationFromFile (fileName):
     fileName (String): Path to LOG File
 
     Element Index's for the returned list
-    [0]: Radiation in the last minute
-    [1]: Radiation in the last five seconds
-    [2]: Radiation total count since start up
-    [3]: Radiation Count Validity Flag
-    [4]: Longitude in Decimal Notation
-    [5]: Latitude in Decimal Notation
-    [6]: Altitude
-    [7]: GPS Location Validity Flag
+    [0]: Time Stamp in UTC
+    [1]: Radiation in the last minute
+    [2]: Radiation in the last five seconds
+    [3]: Radiation total count since start up
+    [4]: Radiation Count Validity Flag
+    [5]: Longitude in Decimal Notation
+    [6]: Latitude in Decimal Notation
+    [7]: Altitude
+    [8]: GPS Location Validity Flag
     """
 
     fileList = []
@@ -75,7 +76,7 @@ def getInformationFromFile (fileName):
 
         # Remove unwanted tokens from each line
         for i in range (len (fileList)):
-            fileList[i] = fileList[i][3:-2]
+            fileList[i] = fileList[i][2:-2]
 
             # Get Decimal Latitude and Longitude
             """
@@ -85,15 +86,15 @@ def getInformationFromFile (fileName):
             Google KML needs longitude first, so it makes more sense to
             place it earlier in the list rather than later.
             """
-            longitude = convertToDecimal (fileList[i][6], fileList[i][7]) # Longitude is the 7th Element and its Hemisphere is the 8th
-            latitude  = convertToDecimal (fileList[i][4], fileList[i][5]) # Latitude is the 5th Element and its Hemisphere is the 6th
+            longitude = convertToDecimal (fileList[i][7], fileList[i][8]) # Longitude is the 8th Element and its Hemisphere is the 9th
+            latitude  = convertToDecimal (fileList[i][5], fileList[i][6]) # Latitude is the 6th Element and its Hemisphere is the 7th
 
             # Change Values in List and remove Hemisphere Orientation
-            fileList[i][4] = str (longitude)
-            fileList[i][6] = str (latitude)
+            fileList[i][5] = str (longitude)
+            fileList[i][7] = str (latitude)
 
-            del fileList[i][5]
-            del fileList[i][6] # Remove 6 and not 7 because there is one less element now
+            del fileList[i][6]
+            del fileList[i][7] # Remove 7 and not 8 because there is one less element now
 
     return fileList
 
