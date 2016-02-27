@@ -29,7 +29,7 @@ def mapData(data):
 		path.append(data[0])
 
 		# Determine the radiation level of the path
-		radlvl = data[0][0]
+		radlvl = data[0][1]
 
 		# Calculate the radiation color of the path
 		radColor = calcRadColor(data[0])
@@ -54,7 +54,7 @@ def getPoint(entry):
 	Parameters:
 	entry 	(List): A single parsed log entry
 	"""
-	return [float(entry[4]), float(entry[5])]
+	return [float(entry[5]), float(entry[6])]
 
 #chopping block
 def avgRadColor(radOne, radTwo):
@@ -94,9 +94,9 @@ def calcRadColor(entry):
 	Returns an 8 digit hexadecimal ABGR string
 	"""
 	alpha 	= calcAlpha(entry)
-	red 	= calcRed(int(entry[0]))
-	green	= calcGreen(int(entry[0]))
-	blue	= calcBlue(int(entry[0]))
+	red 	= calcRed(int(entry[1]))
+	green	= calcGreen(int(entry[1]))
+	blue	= calcBlue(int(entry[1]))
 	return alpha + blue + green + red
 
 
@@ -248,7 +248,7 @@ def calcAlpha(entry):
 	"""
 	# If either validity flag is void, represent with 50% transparency
 	# Otherwise, the path should be fully opaque
-	if entry[3] == "V" or entry[7] == "V":
+	if entry[4] == "V" or entry[8] == "V":
 		alpha = 128
 	else:
 		alpha = 255
