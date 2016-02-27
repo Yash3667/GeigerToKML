@@ -46,43 +46,6 @@ def mapData(data):
 		makeLine(path, radColor, radlvl)
 
 
-#chopping block
-def getPoint(entry):
-	"""
-	Extracts the latitude and longitude from a data entry
-
-	Parameters:
-	entry 	(List): A single parsed log entry
-	"""
-	return [float(entry[5]), float(entry[6])]
-
-#chopping block
-def avgRadColor(radOne, radTwo):
-	"""
-	Averages two radiation colors.
-	Decodes from an 8 digit hexademical ABGR string
-
-	Parameters:
-	radOne 	(String): A 32 bit ABGR hex string
-	radTwo 	(String): A 32 bit ABGR hex string
-
-	Returns an 8 digit hexadecimal ABGR string
-	"""
-	alpha = (int(radOne[:2], 16) + int(radTwo[:2], 16)) // 2
-	alpha = hex(alpha)[2:].zfill(2)
-
-	blue = (int(radOne[2:4], 16) + int(radTwo[2:4], 16)) // 2
-	blue = hex(blue)[2:].zfill(2)
-
-	green = (int(radOne[4:6], 16) + int(radTwo[4:6], 16)) // 2
-	green = hex(green)[2:].zfill(2)
-
-	red = (int(radOne[6:8], 16) + int(radTwo[6:8], 16)) // 2
-	red = hex(red)[2:].zfill(2)
-	
-	return alpha + blue + green + red
-
-
 def calcRadColor(entry):
 	"""
 	Calculates the color for a given entry
@@ -117,42 +80,19 @@ def calcRed(radlvl):
 	if radlvl <= trivialCPM:
 		red = 0
 	elif radlvl <= notableCPM:
-		#red = 255 - 128 * (radlvl - trivialCPM) / (notableCPM - trivialCPM)
 		k = -log(128.0/127 - 1) / notableCPM
 		x = radlvl - trivialCPM
-		red =  256 / (1 + exp(-1 * k * x)) # + 127
+		red =  256 / (1 + exp(-1 * k * x)) 
 	elif radlvl <= mediumCPM:
-		#red = 255 - 128 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
 		k = -log(128.0/127 - 1) / mediumCPM
 		x = radlvl - notableCPM
-		red = 256 / (1 + exp(-1 * k * x)) # + 127
+		red = 256 / (1 + exp(-1 * k * x)) 
 	elif radlvl <= highCPM:
-		#red = 255 - 128 * (radlvl - mediumCPM) / (highCPM - mediumCPM)
 		k = -log(128.0/127 - 1) / highCPM
 		x = radlvl - mediumCPM
-		red = 256 / (1 + exp(-1 * k * x)) # + 127
+		red = 256 / (1 + exp(-1 * k * x)) 
 	else:
 		red = 127
-
-	'''if radlvl <= trivialCPM:
-		red = 0
-	elif radlvl <= notableCPM:
-		red = 192 + 64 * (radlvl- trivialCPM) / (notableCPM - trivialCPM)
-	else:
-		red = 255'''
-
-	'''if radlvl <= trivialCPM:
-		red = 0
-	elif radlvl <= notableCPM:
-		k = -log(128.0/127 - 1) / notableCPM
-		x = radlvl - trivialCPM
-		red = 256 / (1 + exp(-1 * k * x)) - 128
-	elif radlvl > mediumCPM:
-		k = -log(127.0/126 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		red = 128 + 255 / (1 + exp(k * x))
-	else:
-		red = 255'''
 
 	return hex(int(red))[2:].zfill(2)
 
@@ -167,51 +107,19 @@ def calcGreen(radlvl):
 	Returns a 2 digit hexadecimal string
 	"""
 	if radlvl <= trivialCPM:
-		#green = 255 - 128 * radlvl / trivialCPM
 		k = -log(128.0/127 - 1) / trivialCPM
 		x = radlvl
-		green = 256 / (1 + exp(-1 * k * x)) # + 127
+		green = 256 / (1 + exp(-1 * k * x))
 	elif radlvl <= notableCPM:
-		#green = 255 - 128 * (radlvl - trivialCPM) / (notableCPM - trivialCPM)
 		k = -log(128.0/127 - 1) / notableCPM
 		x = radlvl - trivialCPM
-		green = 256 / (1 + exp(-1 * k * x)) # + 127
+		green = 256 / (1 + exp(-1 * k * x))
 	elif radlvl <= mediumCPM:
-		#green = 64 - 32 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
 		k = -log(32.0/31 - 1) / mediumCPM
 		x = radlvl - notableCPM
 		green = 64 / (1 + exp(-1 * k * x)) # + 31
 	else:
 		green = 0
-
-	'''if radlvl <= notableCPM:
-		green = 255
-	elif radlvl <= mediumCPM:
-		green = 192 - 64 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
-	elif radlvl <= highCPM:
-		green = 64 - 64 * (radlvl - mediumCPM) / (highCPM - mediumCPM)
-	else:
-		green = 0'''
-
-	'''#if radlvl <= trivialCPM:
-	#	green = 255
-	if radlvl <= notableCPM:
-		green = 255
-	elif radlvl <= mediumCPM:
-		k = -log(255.0/254 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		green = 510 / ( 1 + exp(k * x))
-	else: 
-		green = 0'''
-	'''elif radlvl <= mediumCPM:
-		k = -log(127.0/126 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		green = 128 + 255 / (1 + exp(k * x))
-	elif radlvl <= highCPM:
-		k = -log(127.0/126 - 1) / highCPM
-		x = radlvl - mediumCPM
-		green = 255 / (1 + exp(k * x))'''
-	
 
 	return hex(int(green))[2:].zfill(2)
 
@@ -225,14 +133,6 @@ def calcBlue(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
-	'''if radlvl <= mediumCPM:
-		blue = 0
-	elif radlvl <= highCPM:
-		k = -log(200.0/199 - 1) / highCPM
-		x = radlvl - mediumCPM
-		blue = 400 / (1 + exp(-1 * k * x)) - 200
-	else:
-		blue = 255'''
 	blue = 00
 	return hex(int(blue))[2:].zfill(2)
 
