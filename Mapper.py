@@ -1,5 +1,6 @@
 from Milestones import *
 from KMLWriter import *
+from math import *
 
 
 def mapData(data):
@@ -10,41 +11,42 @@ def mapData(data):
 	Parameters:
 	data 	(List): A list of parsed log entries
 	"""
+	#should we put a placemarker for the beginning? we don't know where it comes from.....
+	#other option: don't show data without a valid radiation flag. a valid radiation flag guarantees 1 minute of previous entries
 
-	# Handle datasets of a single entry
-	if len(data) == 1:
-		entry = data[0]
-		radColor = calcRadColor(entry)
-		makeMarker(getPoint(entry), radColor)
+	'''# Skip data with an invalid radiation flag
+	# One invalid entry is left for beginning coordinates of the path
+	while len(data) > 1 and data[1][4] == "V":
+		del data[0]'''
 
 	while len(data) > 1:
 		# Make a new path
 		path = []
 
-		# Calculate the radiation color of the path
-		radOne = calcRadColor(data[0])
-		radTwo = calcRadColor(data[1])
-
-		radColor = avgRadColor(radOne, radTwo)
-
-		# Extract the lat and long and put them on the path
-		path.append(getPoint(data[0]))
+		# Set the initial points
+		path.append(data[0])
 		del data[0]
-		path.append(getPoint(data[0]))
+		path.append(data[0])
+
+		# Determine the radiation level of the path
+		radlvl = data[0][0]
+
+		# Calculate the radiation color of the path
+		radColor = calcRadColor(data[0])
+
 
 		# Add additional points to the path, if applicable
 		while len(data) > 1:
-			path.append(getPoint(data[0]))
-
-			if calcRadColor(data[1]) == radColor:
+			if data[1][0] == radlvl:
 				del data[0]
+				path.append(data[0])
 			else:
 				break
 
-		makeLine(path, radColor)
+		makeLine(path, radColor, radlvl)
 
 
-
+#chopping block
 def getPoint(entry):
 	"""
 	Extracts the latitude and longitude from a data entry
@@ -54,7 +56,7 @@ def getPoint(entry):
 	"""
 	return [float(entry[4]), float(entry[5])]
 
-
+#chopping block
 def avgRadColor(radOne, radTwo):
 	"""
 	Averages two radiation colors.
@@ -91,7 +93,7 @@ def calcRadColor(entry):
 
 	Returns an 8 digit hexadecimal ABGR string
 	"""
-	alpha 	= calcAlpha(int(entry[0]))
+	alpha 	= calcAlpha(entry)
 	red 	= calcRed(int(entry[0]))
 	green	= calcGreen(int(entry[0]))
 	blue	= calcBlue(int(entry[0]))
@@ -111,12 +113,46 @@ def calcRed(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
+
 	if radlvl <= trivialCPM:
 		red = 0
 	elif radlvl <= notableCPM:
-		red = (radlvl - trivialCPM) * 255 // (notableCPM - trivialCPM)
+		#red = 255 - 128 * (radlvl - trivialCPM) / (notableCPM - trivialCPM)
+		k = -log(128.0/127 - 1) / notableCPM
+		x = radlvl - trivialCPM
+		red = 127 + 256 / (1 + exp(k * x))
+	elif radlvl <= mediumCPM:
+		#red = 255 - 128 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
+		k = -log(128.0/127 - 1) / mediumCPM
+		x = radlvl - notableCPM
+		red = 127 + 256 / (1 + exp(k * x))
+	elif radlvl <= highCPM:
+		#red = 255 - 128 * (radlvl - mediumCPM) / (highCPM - mediumCPM)
+		k = -log(128.0/127 - 1) / highCPM
+		x = radlvl - mediumCPM
+		red = 127 + 256 / (1 + exp(k * x))
 	else:
-		red = 255
+		red = 127
+
+	'''if radlvl <= trivialCPM:
+		red = 0
+	elif radlvl <= notableCPM:
+		red = 192 + 64 * (radlvl- trivialCPM) / (notableCPM - trivialCPM)
+	else:
+		red = 255'''
+
+	'''if radlvl <= trivialCPM:
+		red = 0
+	elif radlvl <= notableCPM:
+		k = -log(128.0/127 - 1) / notableCPM
+		x = radlvl - trivialCPM
+		red = 256 / (1 + exp(-1 * k * x)) - 128
+	elif radlvl > mediumCPM:
+		k = -log(127.0/126 - 1) / mediumCPM
+		x = radlvl - notableCPM
+		red = 128 + 255 / (1 + exp(k * x))
+	else:
+		red = 255'''
 
 	return hex(int(red))[2:].zfill(2)
 
@@ -130,14 +166,52 @@ def calcGreen(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
+	if radlvl <= trivialCPM:
+		#green = 255 - 128 * radlvl / trivialCPM
+		k = -log(128.0/127 - 1) / trivialCPM
+		x = radlvl
+		green = 127 + 256 / (1 + exp(k * x))
+	elif radlvl <= notableCPM:
+		#green = 255 - 128 * (radlvl - trivialCPM) / (notableCPM - trivialCPM)
+		k = -log(128.0/127 - 1) / notableCPM
+		x = radlvl - trivialCPM
+		green = 127 + 256 / (1 + exp(k * x))
+	elif radlvl <= mediumCPM:
+		#green = 64 - 32 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
+		k = -log(32.0/31 - 1) / mediumCPM
+		x = radlvl - notableCPM
+		green = 31 + 64 / (1 + exp(k * x))
+	else:
+		green = 0
+
+	'''if radlvl <= notableCPM:
+		green = 255
+	elif radlvl <= mediumCPM:
+		green = 192 - 64 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
+	elif radlvl <= highCPM:
+		green = 64 - 64 * (radlvl - mediumCPM) / (highCPM - mediumCPM)
+	else:
+		green = 0'''
+
+	'''#if radlvl <= trivialCPM:
+	#	green = 255
 	if radlvl <= notableCPM:
 		green = 255
 	elif radlvl <= mediumCPM:
-		green = 255 - (radlvl - notableCPM) * 128 // (mediumCPM - notableCPM)
-	elif radlvl <= highCPM:
-		green = 128 - (radlvl - mediumCPM) * 128 // (highCPM - mediumCPM)
+		k = -log(255.0/254 - 1) / mediumCPM
+		x = radlvl - notableCPM
+		green = 510 / ( 1 + exp(k * x))
 	else: 
-		green = 0
+		green = 0'''
+	'''elif radlvl <= mediumCPM:
+		k = -log(127.0/126 - 1) / mediumCPM
+		x = radlvl - notableCPM
+		green = 128 + 255 / (1 + exp(k * x))
+	elif radlvl <= highCPM:
+		k = -log(127.0/126 - 1) / highCPM
+		x = radlvl - mediumCPM
+		green = 255 / (1 + exp(k * x))'''
+	
 
 	return hex(int(green))[2:].zfill(2)
 
@@ -151,20 +225,31 @@ def calcBlue(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
-	# No blue in Green, Yellow, or Red
-	blue = 0
-	return hex(blue)[2:].zfill(2)
+	'''if radlvl <= mediumCPM:
+		blue = 0
+	elif radlvl <= highCPM:
+		k = -log(200.0/199 - 1) / highCPM
+		x = radlvl - mediumCPM
+		blue = 400 / (1 + exp(-1 * k * x)) - 200
+	else:
+		blue = 255'''
+	blue = 00
+	return hex(int(blue))[2:].zfill(2)
 
 
-def calcAlpha(radlvl):
+def calcAlpha(entry):
 	"""
 	Calculates the level of Alpha
 
 	Parameters:
-	radlvl 	(int): The radiation level in CPM
+	entry	(List): A parsed data entry
 
 	Returns a 2 digit hexadecimal string
 	"""
-	# Fully opaque
-	alpha = 255
+	# If either validity flag is void, represent with 50% transparency
+	# Otherwise, the path should be fully opaque
+	if entry[3] == "V" or entry[7] == "V":
+		alpha = 128
+	else:
+		alpha = 255
 	return hex(alpha)[2:].zfill(2)
