@@ -47,7 +47,7 @@ def makeLine(points,color,radLevel):
     name = ET.SubElement(Placemark,"name")
     name.text = radLevel+"cpm"
     description = ET.SubElement(Placemark,"description")
-    description.text = str(points[1][8]).replace("T"," ").replace("Z","")
+    description.text = str(points[1][0]).replace("T"," ").replace("Z","")
 
     #This creates the LineString, tessellates it, and initializes the coordinates tag
     LineString = ET.SubElement(Placemark, "LineString")
@@ -57,7 +57,7 @@ def makeLine(points,color,radLevel):
     LineStringCoor.text = ""
     for point in points:
         #for each point on the line add it's cordinates to the cordinate tag
-        coor = str(point[4])+","+str(point[5])+","+str(point[6])+"\n"
+        coor = str(point[5])+","+str(point[6])+","+str(point[7])+"\n"
         LineStringCoor.text = LineStringCoor.text+coor
 
 
