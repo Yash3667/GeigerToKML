@@ -21,15 +21,15 @@ def initKML(widthLength = "10"):
 
 
 
-def makeLine(points,color):
+def makeLine(points,color,radLevel):
     """
     This is the main function of the module
 
     Parameters
-    points   (list): a list of length 2 lists
-                     each of which are composed of
-                     a latitude and a longitude
-    color  (string): a abgr hex code
+    points      (list): a list of length 7 lists
+                        who's elements are detailed in Parser.py
+    color     (string): a abgr hex code
+    radLevel  (string): the radiation level for the path as a string
     """
     #this creates the style tag that will give the LineString it's color and width
     Style = ET.SubElement(Document, "Style", id=color)
@@ -44,6 +44,10 @@ def makeLine(points,color):
     #This links up the Placemark and the style tag
     styleUrl = ET.SubElement(Placemark,"styleUrl")
     styleUrl.text = "#"+color
+    name = ET.SubElement(Placemark,"name")
+    name.text = radLevel+"cpm"
+    description = ET.SubElement(Placemark,"description")
+    description.text = str(points[1][8]).replace("T"," ").replace("Z","")
 
     #This creates the LineString, tessellates it, and initializes the coordinates tag
     LineString = ET.SubElement(Placemark, "LineString")
@@ -53,7 +57,7 @@ def makeLine(points,color):
     LineStringCoor.text = ""
     for point in points:
         #for each point on the line add it's cordinates to the cordinate tag
-        coor = str(point[0])+","+str(point[1])+","+"0\n"
+        coor = str(point[4])+","+str(point[5])+","+str(point[6])+"\n"
         LineStringCoor.text = LineStringCoor.text+coor
 
 
