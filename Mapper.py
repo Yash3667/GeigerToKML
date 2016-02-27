@@ -120,17 +120,17 @@ def calcRed(radlvl):
 		#red = 255 - 128 * (radlvl - trivialCPM) / (notableCPM - trivialCPM)
 		k = -log(128.0/127 - 1) / notableCPM
 		x = radlvl - trivialCPM
-		red = 127 + 256 / (1 + exp(k * x))
+		red =  256 / (1 + exp(-1 * k * x)) # + 127
 	elif radlvl <= mediumCPM:
 		#red = 255 - 128 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
 		k = -log(128.0/127 - 1) / mediumCPM
 		x = radlvl - notableCPM
-		red = 127 + 256 / (1 + exp(k * x))
+		red = 256 / (1 + exp(-1 * k * x)) # + 127
 	elif radlvl <= highCPM:
 		#red = 255 - 128 * (radlvl - mediumCPM) / (highCPM - mediumCPM)
 		k = -log(128.0/127 - 1) / highCPM
 		x = radlvl - mediumCPM
-		red = 127 + 256 / (1 + exp(k * x))
+		red = 256 / (1 + exp(-1 * k * x)) # + 127
 	else:
 		red = 127
 
@@ -170,17 +170,17 @@ def calcGreen(radlvl):
 		#green = 255 - 128 * radlvl / trivialCPM
 		k = -log(128.0/127 - 1) / trivialCPM
 		x = radlvl
-		green = 127 + 256 / (1 + exp(k * x))
+		green = 256 / (1 + exp(-1 * k * x)) # + 127
 	elif radlvl <= notableCPM:
 		#green = 255 - 128 * (radlvl - trivialCPM) / (notableCPM - trivialCPM)
 		k = -log(128.0/127 - 1) / notableCPM
 		x = radlvl - trivialCPM
-		green = 127 + 256 / (1 + exp(k * x))
+		green = 256 / (1 + exp(-1 * k * x)) # + 127
 	elif radlvl <= mediumCPM:
 		#green = 64 - 32 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
 		k = -log(32.0/31 - 1) / mediumCPM
 		x = radlvl - notableCPM
-		green = 31 + 64 / (1 + exp(k * x))
+		green = 64 / (1 + exp(-1 * k * x)) # + 31
 	else:
 		green = 0
 
