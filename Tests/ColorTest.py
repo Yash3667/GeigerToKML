@@ -34,12 +34,39 @@ def calcColor(radlvl):
 
 lvl = 0
 speed(0)
+setx(-350)
+clear()
 left(90)
 
-while calcGreen(lvl) != "00":
+factor = 0
+factorfactor = 0
+while lvl < 350000:#calcBlue(lvl) != "ff":
 	col = calcColor(lvl)
 	drawLine(col)
 	nextLine()
-	lvl += 750
+	#lvl += 750
+	#c += 1
+	#if c > 5:
+	lvl += factor
+	factor += factorfactor
+	factorfactor += 0.1
+	
+
+'''
+while lvl <= mediumCPM:
+	col = calcColor(lvl)
+	drawLine(col)
+	nextLine()
+	lvl  += 100
+
+sety(100)
+setx(-350)
+
+while calcBlue(lvl) != "ff":
+	col = calcColor(lvl)
+	drawLine(col)
+	nextLine()
+	lvl  += 750
+	'''
 
 done()
