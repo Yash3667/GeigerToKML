@@ -249,7 +249,7 @@ def calcAlpha(entry):
 	# If either validity flag is void, represent with 50% transparency
 	# Otherwise, the path should be fully opaque
 	if entry[4] == "V" or entry[8] == "V":
-		alpha = 128
+		alpha = 64
 	else:
 		alpha = 255
 	return hex(alpha)[2:].zfill(2)
