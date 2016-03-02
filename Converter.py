@@ -14,10 +14,6 @@ import Parser
 import Mapper
 import KMLWriter
 
-""" Global Variables """
-
-colorBlind = 0
-
 def printUsage():
     """
     Print Usage of Script and exits
@@ -73,7 +69,7 @@ for option, value in opts:
     if option in ("-h", "--help"):
         printUsage ()
     elif option in ("-c", "--colorblind"):
-        colorBlind = 1
+        Mapper.colorBlind = 1
     elif option in ("-i", "--input"):
         logFile = value
     elif option in ("-o", "--output"):
