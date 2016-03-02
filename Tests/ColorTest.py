@@ -1,72 +1,75 @@
 import os.path, sys
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
+import turtle
 
-from turtle import *
 from Milestones import *
-from Mapper import *
+import Mapper
 
 
 
 def drawLine(r, g, b):
-	color("#" + r + g + b)
-	forward(100)
+	turtle.color("#" + r + g + b)
+	turtle.forward(100)
 
 def drawLine(col):
-	color(col)
-	forward(100)
+	turtle.color(col)
+	turtle.forward(100)
 
 def nextLine():
-	back(100)
-	right(90)
-	forward(1)
-	left(90)
+	turtle.back(100)
+	turtle.right(90)
+	turtle.forward(1)
+	turtle.left(90)
 
 
 
 def calcColor(radlvl):
-	red 	= calcRed(radlvl)
-	green 	= calcGreen(radlvl)
-	blue 	= calcBlue(radlvl)
+	red 	= Mapper.calcRed(radlvl)
+	green 	= Mapper.calcGreen(radlvl)
+	blue 	= Mapper.calcBlue(radlvl)
 	return "#" + red + green + blue
 
 
-
+# Regular
+Mapper.colorBlind = False
 lvl = 0
-speed(0)
-setx(-350)
-clear()
-left(90)
+turtle.speed(0)
+turtle.setx(-350)
+turtle.clear()
+turtle.left(90)
 
-factor = 0
-factorfactor = 0
-while lvl < 350000:#calcBlue(lvl) != "ff":
+while lvl <= highCPM:
 	col = calcColor(lvl)
 	drawLine(col)
 	nextLine()
-	#lvl += 750
-	#c += 1
-	#if c > 5:
-	lvl += factor
-	factor += factorfactor
-	factorfactor += 0.1
+	if lvl <= trivialCPM:
+		lvl += trivialCPM / 100
+	elif lvl <= notableCPM:
+		lvl += (notableCPM - trivialCPM) / 100
+	elif lvl <= mediumCPM:
+		lvl += (mediumCPM - notableCPM) / 100
+	else:
+		lvl += (highCPM - mediumCPM) / 100
 	
 
-'''
-while lvl <= mediumCPM:
+#ColorBlind
+Mapper.colorBlind = True
+lvl = 0
+turtle.setx(-350)
+turtle.sety(100)
+
+while lvl <= highCPM:
 	col = calcColor(lvl)
 	drawLine(col)
 	nextLine()
-	lvl  += 100
+	if lvl <= trivialCPM:
+		lvl += trivialCPM / 100
+	elif lvl <= notableCPM:
+		lvl += (notableCPM - trivialCPM) / 100
+	elif lvl <= mediumCPM:
+		lvl += (mediumCPM - notableCPM) / 100
+	else:
+		lvl += (highCPM - mediumCPM) / 100
 
-sety(100)
-setx(-350)
-
-while calcBlue(lvl) != "ff":
-	col = calcColor(lvl)
-	drawLine(col)
-	nextLine()
-	lvl  += 750
-	'''
-
-done()
+turtle.done()

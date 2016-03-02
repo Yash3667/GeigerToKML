@@ -1,7 +1,11 @@
-from Milestones import *
-from KMLWriter import *
 from math import *
 
+from Milestones import *
+import KMLWriter
+
+global colorBlind
+# A base case
+colorBlind = False
 
 def mapData(data):
 	"""
@@ -11,13 +15,7 @@ def mapData(data):
 	Parameters:
 	data 	(List): A list of parsed log entries
 	"""
-	#should we put a placemarker for the beginning? we don't know where it comes from.....
-	#other option: don't show data without a valid radiation flag. a valid radiation flag guarantees 1 minute of previous entries
 
-	'''# Skip data with an invalid radiation flag
-	# One invalid entry is left for beginning coordinates of the path
-	while len(data) > 1 and data[1][4] == "V":
-		del data[0]'''
 
 	while len(data) > 1:
 		# Make a new path
@@ -43,7 +41,7 @@ def mapData(data):
 			else:
 				break
 
-		makeLine(path, radColor, radlvl)
+		KMLWriter.makeLine(path, radColor, radlvl)
 
 
 def calcRadColor(entry):
@@ -76,23 +74,33 @@ def calcRed(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
+	if colorBlind:
+		if radlvl <= trivialCPM:
+			red = 230
+		elif radlvl <= notableCPM:
+			red = 253
+		elif radlvl <= mediumCPM:
+			red = 178
+		else:
+			red = 94
 
-	if radlvl <= trivialCPM:
-		red = 0
-	elif radlvl <= notableCPM:
-		k = -log(128.0/127 - 1) / notableCPM
-		x = radlvl - trivialCPM
-		red =  256 / (1 + exp(-1 * k * x)) 
-	elif radlvl <= mediumCPM:
-		k = -log(128.0/127 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		red = 256 / (1 + exp(-1 * k * x)) 
-	elif radlvl <= highCPM:
-		k = -log(128.0/127 - 1) / highCPM
-		x = radlvl - mediumCPM
-		red = 256 / (1 + exp(-1 * k * x)) 
 	else:
-		red = 127
+		if radlvl <= trivialCPM:
+			red = 0
+		elif radlvl <= notableCPM:
+			x = radlvl - trivialCPM	
+			theta = x * radians(180)/ (notableCPM - trivialCPM)
+			red = 191 - 64 * cos(theta)
+		elif radlvl <= mediumCPM:
+			x = radlvl - notableCPM
+			theta = x * radians(180) / (mediumCPM - notableCPM)
+			red = 191 - 64 * cos(theta)
+		elif radlvl <= highCPM:
+			x = radlvl - mediumCPM
+			theta = x * radians(180) / (highCPM - mediumCPM)
+			red = 191 - 64 * cos(theta)
+		else:
+			red = 127
 
 	return hex(int(red))[2:].zfill(2)
 
@@ -106,20 +114,32 @@ def calcGreen(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
-	if radlvl <= trivialCPM:
-		k = -log(128.0/127 - 1) / trivialCPM
-		x = radlvl
-		green = 256 / (1 + exp(-1 * k * x))
-	elif radlvl <= notableCPM:
-		k = -log(128.0/127 - 1) / notableCPM
-		x = radlvl - trivialCPM
-		green = 256 / (1 + exp(-1 * k * x))
-	elif radlvl <= mediumCPM:
-		k = -log(32.0/31 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		green = 64 / (1 + exp(-1 * k * x)) # + 31
+	if colorBlind:
+		if radlvl <= trivialCPM:
+			green = 97
+		elif radlvl <= notableCPM:
+			green = 184
+		elif radlvl <= mediumCPM:
+			green = 171
+		else:
+			green = 60
+
+
 	else:
-		green = 0
+		if radlvl <= trivialCPM:
+			x = radlvl
+			theta = x * radians(180) / trivialCPM
+			green = 191 - 64 * cos(theta)
+		elif radlvl <= notableCPM:
+			x = radlvl - trivialCPM
+			theta = x * radians(180)/ (notableCPM - trivialCPM)
+			green = 191 - 64 * cos(theta)
+		elif radlvl <= mediumCPM:
+			x = radlvl - notableCPM
+			theta = x * radians(180)/ (mediumCPM - notableCPM)
+			green = 64 - 16 * cos(theta)
+		else:
+			green = 0
 
 	return hex(int(green))[2:].zfill(2)
 
@@ -133,7 +153,18 @@ def calcBlue(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
-	blue = 00
+	if colorBlind:
+		if radlvl <= trivialCPM:
+			blue = 1
+		elif radlvl <= notableCPM:
+			blue = 99
+		elif radlvl <= mediumCPM:
+			blue = 210
+		else:
+			blue = 153
+
+	else:
+		blue = 00
 	return hex(int(blue))[2:].zfill(2)
 
 
