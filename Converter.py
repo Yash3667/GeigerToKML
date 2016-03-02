@@ -14,6 +14,10 @@ import Parser
 import Mapper
 import KMLWriter
 
+""" Global Variables """
+
+colorBlind = 0
+
 def printUsage():
     """
     Print Usage of Script and exits
@@ -28,8 +32,11 @@ def printUsage():
     print
     print "     -o               output file"
     print "     --output         "
+    print
     print "     -w               width of path n kml"
     print "     --width         "
+    print "     -c               enable color blind mode"
+    print "     --colorblind    "
     print
     print "Examples"
     print
@@ -56,7 +63,7 @@ if Parser.checkArguments (sys.argv) == -1:
 else:
     # Get the arguments
     try:
-        opts, args = getopt.getopt (sys.argv[1:], "i:o:w:h", ["input=", "output=", "width=", "help"])
+        opts, args = getopt.getopt (sys.argv[1:], "i:o:w:ch", ["input=", "output=", "width=", "colorblind", "help"])
     except getopt.GetoptError as err:
         print str(err)
         printUsage ()
@@ -65,6 +72,8 @@ else:
 for option, value in opts:
     if option in ("-h", "--help"):
         printUsage ()
+    elif option in ("-c", "--colorblind"):
+        colorBlind = 1
     elif option in ("-i", "--input"):
         logFile = value
     elif option in ("-o", "--output"):
@@ -104,8 +113,8 @@ if outputFile == "":
 elif outputFile[-4:] != ".kml":
     outputFile += ".kml"
 
-print "Logging In:", logFile
-print "Outputting:", outputFile
+print "Input :", logFile
+print "Output:", outputFile
 
 # Initialize the KML File
 if widthText == "":
