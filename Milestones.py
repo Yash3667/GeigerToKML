@@ -4,21 +4,17 @@ milestone colors are reached (see documentation for further
 details). 
 """
 
-# Trivial corresponds to Green
 trivialDose 	= 3
 trivialPeriod	= 24 * 365
 
-# Notable corresponds to Yellow
-notableDose		= 130
-notablePeriod	= 24 * 365
-
-# Medium corresponds to Orange
-mediumDose		= 700
+mediumDose		= 130
 mediumPeriod	= 24 * 365
 
-# High corresponds to Red
-highDose		= 170
-highPeriod		= 24 * 7
+highDose		= 700
+highPeriod	= 24 * 365
+
+veryHighDose		= 170
+veryHighPeriod		= 24 * 7
 
 
 
@@ -40,6 +36,6 @@ def convertToCPM(dose, period):
 	return conversionFactor * dose / period
 
 trivialCPM 	= convertToCPM(trivialDose, trivialPeriod)
-notableCPM 	= convertToCPM(notableDose, notablePeriod)
-mediumCPM	= convertToCPM(mediumDose, mediumPeriod)
+mediumCPM 	= convertToCPM(mediumDose, mediumPeriod)
 highCPM 	= convertToCPM(highDose, highPeriod)
+veryHighCPM = convertToCPM(veryHighDose, veryHighPeriod)

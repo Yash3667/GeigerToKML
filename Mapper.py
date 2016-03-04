@@ -77,9 +77,9 @@ def calcRed(radlvl):
 	if colorBlind:
 		if radlvl <= trivialCPM:
 			red = 230
-		elif radlvl <= notableCPM:
-			red = 253
 		elif radlvl <= mediumCPM:
+			red = 253
+		elif radlvl <= highCPM:
 			red = 178
 		else:
 			red = 94
@@ -87,17 +87,17 @@ def calcRed(radlvl):
 	else:
 		if radlvl <= trivialCPM:
 			red = 0
-		elif radlvl <= notableCPM:
-			x = radlvl - trivialCPM	
-			theta = x * radians(180)/ (notableCPM - trivialCPM)
-			red = 191 - 64 * cos(theta)
 		elif radlvl <= mediumCPM:
-			x = radlvl - notableCPM
-			theta = x * radians(180) / (mediumCPM - notableCPM)
+			x = radlvl - trivialCPM	
+			theta = x * radians(180)/ (mediumCPM - trivialCPM)
 			red = 191 - 64 * cos(theta)
 		elif radlvl <= highCPM:
 			x = radlvl - mediumCPM
 			theta = x * radians(180) / (highCPM - mediumCPM)
+			red = 191 - 64 * cos(theta)
+		elif radlvl <= veryHighCPM:
+			x = radlvl - highCPM
+			theta = x * radians(180) / (veryHighCPM - highCPM)
 			red = 191 - 64 * cos(theta)
 		else:
 			red = 127
@@ -117,9 +117,9 @@ def calcGreen(radlvl):
 	if colorBlind:
 		if radlvl <= trivialCPM:
 			green = 97
-		elif radlvl <= notableCPM:
-			green = 184
 		elif radlvl <= mediumCPM:
+			green = 184
+		elif radlvl <= highCPM:
 			green = 171
 		else:
 			green = 60
@@ -130,13 +130,13 @@ def calcGreen(radlvl):
 			x = radlvl
 			theta = x * radians(180) / trivialCPM
 			green = 191 - 64 * cos(theta)
-		elif radlvl <= notableCPM:
-			x = radlvl - trivialCPM
-			theta = x * radians(180)/ (notableCPM - trivialCPM)
-			green = 191 - 64 * cos(theta)
 		elif radlvl <= mediumCPM:
-			x = radlvl - notableCPM
-			theta = x * radians(180)/ (mediumCPM - notableCPM)
+			x = radlvl - trivialCPM
+			theta = x * radians(180)/ (mediumCPM - trivialCPM)
+			green = 191 - 64 * cos(theta)
+		elif radlvl <= highCPM:
+			x = radlvl - mediumCPM
+			theta = x * radians(180)/ (highCPM - mediumCPM)
 			green = 64 - 16 * cos(theta)
 		else:
 			green = 0
@@ -156,15 +156,18 @@ def calcBlue(radlvl):
 	if colorBlind:
 		if radlvl <= trivialCPM:
 			blue = 1
-		elif radlvl <= notableCPM:
-			blue = 99
 		elif radlvl <= mediumCPM:
+			blue = 99
+		elif radlvl <= highCPM:
 			blue = 210
 		else:
 			blue = 153
 
 	else:
-		blue = 00
+		if radlvl < veryHighCPM:
+			blue = 00
+		else:
+			blue = 255
 	return hex(int(blue))[2:].zfill(2)
 
 
