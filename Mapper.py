@@ -1,7 +1,11 @@
-from Milestones import *
-from KMLWriter import *
 from math import *
 
+from Milestones import *
+import KMLWriter
+
+global colorBlind
+# A base case
+colorBlind = False
 
 def mapData(data):
 	"""
@@ -11,13 +15,7 @@ def mapData(data):
 	Parameters:
 	data 	(List): A list of parsed log entries
 	"""
-	#should we put a placemarker for the beginning? we don't know where it comes from.....
-	#other option: don't show data without a valid radiation flag. a valid radiation flag guarantees 1 minute of previous entries
 
-	'''# Skip data with an invalid radiation flag
-	# One invalid entry is left for beginning coordinates of the path
-	while len(data) > 1 and data[1][4] == "V":
-		del data[0]'''
 
 	while len(data) > 1:
 		# Make a new path
@@ -43,44 +41,7 @@ def mapData(data):
 			else:
 				break
 
-		makeLine(path, radColor, radlvl)
-
-
-#chopping block
-def getPoint(entry):
-	"""
-	Extracts the latitude and longitude from a data entry
-
-	Parameters:
-	entry 	(List): A single parsed log entry
-	"""
-	return [float(entry[5]), float(entry[6])]
-
-#chopping block
-def avgRadColor(radOne, radTwo):
-	"""
-	Averages two radiation colors.
-	Decodes from an 8 digit hexademical ABGR string
-
-	Parameters:
-	radOne 	(String): A 32 bit ABGR hex string
-	radTwo 	(String): A 32 bit ABGR hex string
-
-	Returns an 8 digit hexadecimal ABGR string
-	"""
-	alpha = (int(radOne[:2], 16) + int(radTwo[:2], 16)) // 2
-	alpha = hex(alpha)[2:].zfill(2)
-
-	blue = (int(radOne[2:4], 16) + int(radTwo[2:4], 16)) // 2
-	blue = hex(blue)[2:].zfill(2)
-
-	green = (int(radOne[4:6], 16) + int(radTwo[4:6], 16)) // 2
-	green = hex(green)[2:].zfill(2)
-
-	red = (int(radOne[6:8], 16) + int(radTwo[6:8], 16)) // 2
-	red = hex(red)[2:].zfill(2)
-	
-	return alpha + blue + green + red
+		KMLWriter.makeLine(path, radColor, radlvl)
 
 
 def calcRadColor(entry):
@@ -113,46 +74,33 @@ def calcRed(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
+	if colorBlind:
+		if radlvl <= trivialCPM:
+			red = 230
+		elif radlvl <= notableCPM:
+			red = 253
+		elif radlvl <= mediumCPM:
+			red = 178
+		else:
+			red = 94
 
-	if radlvl <= trivialCPM:
-		red = 0
-	elif radlvl <= notableCPM:
-		#red = 255 - 128 * (radlvl - trivialCPM) / (notableCPM - trivialCPM)
-		k = -log(128.0/127 - 1) / notableCPM
-		x = radlvl - trivialCPM
-		red =  256 / (1 + exp(-1 * k * x)) # + 127
-	elif radlvl <= mediumCPM:
-		#red = 255 - 128 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
-		k = -log(128.0/127 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		red = 256 / (1 + exp(-1 * k * x)) # + 127
-	elif radlvl <= highCPM:
-		#red = 255 - 128 * (radlvl - mediumCPM) / (highCPM - mediumCPM)
-		k = -log(128.0/127 - 1) / highCPM
-		x = radlvl - mediumCPM
-		red = 256 / (1 + exp(-1 * k * x)) # + 127
 	else:
-		red = 127
-
-	'''if radlvl <= trivialCPM:
-		red = 0
-	elif radlvl <= notableCPM:
-		red = 192 + 64 * (radlvl- trivialCPM) / (notableCPM - trivialCPM)
-	else:
-		red = 255'''
-
-	'''if radlvl <= trivialCPM:
-		red = 0
-	elif radlvl <= notableCPM:
-		k = -log(128.0/127 - 1) / notableCPM
-		x = radlvl - trivialCPM
-		red = 256 / (1 + exp(-1 * k * x)) - 128
-	elif radlvl > mediumCPM:
-		k = -log(127.0/126 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		red = 128 + 255 / (1 + exp(k * x))
-	else:
-		red = 255'''
+		if radlvl <= trivialCPM:
+			red = 0
+		elif radlvl <= notableCPM:
+			x = radlvl - trivialCPM	
+			theta = x * radians(180)/ (notableCPM - trivialCPM)
+			red = 191 - 64 * cos(theta)
+		elif radlvl <= mediumCPM:
+			x = radlvl - notableCPM
+			theta = x * radians(180) / (mediumCPM - notableCPM)
+			red = 191 - 64 * cos(theta)
+		elif radlvl <= highCPM:
+			x = radlvl - mediumCPM
+			theta = x * radians(180) / (highCPM - mediumCPM)
+			red = 191 - 64 * cos(theta)
+		else:
+			red = 127
 
 	return hex(int(red))[2:].zfill(2)
 
@@ -166,52 +114,32 @@ def calcGreen(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
-	if radlvl <= trivialCPM:
-		#green = 255 - 128 * radlvl / trivialCPM
-		k = -log(128.0/127 - 1) / trivialCPM
-		x = radlvl
-		green = 256 / (1 + exp(-1 * k * x)) # + 127
-	elif radlvl <= notableCPM:
-		#green = 255 - 128 * (radlvl - trivialCPM) / (notableCPM - trivialCPM)
-		k = -log(128.0/127 - 1) / notableCPM
-		x = radlvl - trivialCPM
-		green = 256 / (1 + exp(-1 * k * x)) # + 127
-	elif radlvl <= mediumCPM:
-		#green = 64 - 32 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
-		k = -log(32.0/31 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		green = 64 / (1 + exp(-1 * k * x)) # + 31
-	else:
-		green = 0
+	if colorBlind:
+		if radlvl <= trivialCPM:
+			green = 97
+		elif radlvl <= notableCPM:
+			green = 184
+		elif radlvl <= mediumCPM:
+			green = 171
+		else:
+			green = 60
 
-	'''if radlvl <= notableCPM:
-		green = 255
-	elif radlvl <= mediumCPM:
-		green = 192 - 64 * (radlvl - notableCPM) / (mediumCPM - notableCPM)
-	elif radlvl <= highCPM:
-		green = 64 - 64 * (radlvl - mediumCPM) / (highCPM - mediumCPM)
-	else:
-		green = 0'''
 
-	'''#if radlvl <= trivialCPM:
-	#	green = 255
-	if radlvl <= notableCPM:
-		green = 255
-	elif radlvl <= mediumCPM:
-		k = -log(255.0/254 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		green = 510 / ( 1 + exp(k * x))
-	else: 
-		green = 0'''
-	'''elif radlvl <= mediumCPM:
-		k = -log(127.0/126 - 1) / mediumCPM
-		x = radlvl - notableCPM
-		green = 128 + 255 / (1 + exp(k * x))
-	elif radlvl <= highCPM:
-		k = -log(127.0/126 - 1) / highCPM
-		x = radlvl - mediumCPM
-		green = 255 / (1 + exp(k * x))'''
-	
+	else:
+		if radlvl <= trivialCPM:
+			x = radlvl
+			theta = x * radians(180) / trivialCPM
+			green = 191 - 64 * cos(theta)
+		elif radlvl <= notableCPM:
+			x = radlvl - trivialCPM
+			theta = x * radians(180)/ (notableCPM - trivialCPM)
+			green = 191 - 64 * cos(theta)
+		elif radlvl <= mediumCPM:
+			x = radlvl - notableCPM
+			theta = x * radians(180)/ (mediumCPM - notableCPM)
+			green = 64 - 16 * cos(theta)
+		else:
+			green = 0
 
 	return hex(int(green))[2:].zfill(2)
 
@@ -225,15 +153,18 @@ def calcBlue(radlvl):
 
 	Returns a 2 digit hexadecimal string
 	"""
-	'''if radlvl <= mediumCPM:
-		blue = 0
-	elif radlvl <= highCPM:
-		k = -log(200.0/199 - 1) / highCPM
-		x = radlvl - mediumCPM
-		blue = 400 / (1 + exp(-1 * k * x)) - 200
+	if colorBlind:
+		if radlvl <= trivialCPM:
+			blue = 1
+		elif radlvl <= notableCPM:
+			blue = 99
+		elif radlvl <= mediumCPM:
+			blue = 210
+		else:
+			blue = 153
+
 	else:
-		blue = 255'''
-	blue = 00
+		blue = 00
 	return hex(int(blue))[2:].zfill(2)
 
 
@@ -249,7 +180,7 @@ def calcAlpha(entry):
 	# If either validity flag is void, represent with 50% transparency
 	# Otherwise, the path should be fully opaque
 	if entry[4] == "V" or entry[8] == "V":
-		alpha = 128
+		alpha = 64
 	else:
 		alpha = 255
 	return hex(alpha)[2:].zfill(2)

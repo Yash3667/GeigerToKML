@@ -35,8 +35,8 @@ def printUsage():
     print
     print "     -w               width of path n kml"
     print "     --width         "
-    print "     -c               color blind mode"
-    print "     --colorblind"
+    print "     -c               enable color blind mode"
+    print "     --colorblind    "
     print
     print "Examples"
     print
@@ -73,7 +73,7 @@ for option, value in opts:
     if option in ("-h", "--help"):
         printUsage ()
     elif option in ("-c", "--colorblind"):
-        colorBlind = 1
+        Mapper.colorBlind = 1
     elif option in ("-i", "--input"):
         logFile = value
     elif option in ("-o", "--output"):
@@ -113,8 +113,8 @@ if outputFile == "":
 elif outputFile[-4:] != ".kml":
     outputFile += ".kml"
 
-print "Logging In:", logFile
-print "Outputting:", outputFile
+print "Input :", logFile
+print "Output:", outputFile
 
 # Initialize the KML File
 if widthText == "":
