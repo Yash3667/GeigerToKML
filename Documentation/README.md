@@ -17,7 +17,7 @@
 
 
 	* Visual color distribution using current milestones: 
-![Normalized Distribution](https://github.com/Yash3667/GeigerToKML/blobad/master/Documentation/NormalizedDistribution.png "Normalized Distribution")
+![Normalized Distribution](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/NormalizedDistribution.png "Normalized Distribution")
 ![Real Distribution](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/RealDistribution.png "Real Distribution")
 
 
