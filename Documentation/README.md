@@ -13,10 +13,15 @@
 - As the radiation level approaches the next milestone, the color becomes lighter.
 - Colors range from Green (very low radiation), to Yellow (noteworthy radiation), to Orange (medium radiation) to Red (dangerous radiation) to Purple (extremely dangerous radiation). Corresponding graphs are shown below.
 
-	* ~~Component distribution:~~ ** Updated graphs to be added later
+	* ~~Component distribution:~~ Updated graph to be added later
 
 
-	* ~~Visual color distribution using current milestones:~~ Updated graphs to be added later
+	* Visual color distribution using current milestones: 
+		- Normalized Distribution
+![alt-text](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/NormalizedDistribution.png "Normalized Distribution")
+
+		- Real Distribution
+![alt-text](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/NormalizedDistribution.png "Real Distribution")
 
 
 - The milestones are tunable variables held in Mapper.py. Each milestone is calculated using two tunable constants: 
