@@ -21,7 +21,7 @@
 ![alt-text](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/NormalizedDistribution.png "Normalized Distribution")
 
 		- Real Distribution
-![alt-text](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/NormalizedDistribution.png "Real Distribution")
+![alt-text](https://github.com/Yash3667/GeigerToKML/blob/master/Documentation/RealDistribution.png "Real Distribution")
 
 
 - The milestones are tunable variables held in Mapper.py. Each milestone is calculated using two tunable constants: 
