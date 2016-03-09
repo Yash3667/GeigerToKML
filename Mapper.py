@@ -137,7 +137,7 @@ def calcGreen(radlvl):
 		elif radlvl <= highCPM:
 			x = radlvl - mediumCPM
 			theta = x * radians(180)/ (highCPM - mediumCPM)
-			green = 64 - 16 * cos(theta)
+			green = 80 - 16 * cos(theta)
 		else:
 			green = 0
 
