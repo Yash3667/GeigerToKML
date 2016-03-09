@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
-    <Style id="4000007f">
+    <Style id="40009900">
       <LineStyle>
-        <color>4000007f</color>
+        <color>40009900</color>
         <width>10</width>
       </LineStyle>
     </Style>
     <Placemark>
-      <styleUrl>#4000007f</styleUrl>
-      <name>365139cpm</name>
+      <styleUrl>#40009900</styleUrl>
+      <name>36cpm</name>
       <description>2015-03-17
 17:23:03</description>
       <LineString>
