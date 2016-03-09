@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Style id="4000007f">
+      <LineStyle>
+        <color>4000007f</color>
+        <width>10</width>
+      </LineStyle>
+    </Style>
+    <Placemark>
+      <styleUrl>#4000007f</styleUrl>
+      <name>365139cpm</name>
+      <description>2015-03-17
+17:23:03</description>
+      <LineString>
+        <tessellate>0</tessellate>
+        <coordinates>-122.063098333,37.00117,280.90
+-122.063098333,37.00117,280.90
+</coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>
