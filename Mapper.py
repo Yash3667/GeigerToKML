@@ -26,8 +26,9 @@ def mapData(data):
 		del data[0]
 		path.append(data[0])
 
-		# Determine the radiation level of the path
+		# Determine the radiation level of the path in CPM
 		radlvl = data[0][1]
+
 
 		# Calculate the radiation color of the path
 		radColor = calcRadColor(data[0])
@@ -41,7 +42,57 @@ def mapData(data):
 			else:
 				break
 
+		# Add units and equivalent measurements
+		mSvPerHr = CPMTomSvPerHr(radlvl)
+		Bq = CPMToBq(radlvl)
+		remPerHr = CPMToRemPerHr(radlvl)
+		radlvl = str(radlvl) + " CPM"
+		radlvl = (radlvl, mSvPerHr, Bq, remPerHr)
+
+		# Send the path off to be added to the KML
 		KMLWriter.makeLine(path, radColor, radlvl)
+
+def CPMTomSvPerHr(cpm):
+	"""
+	Converts from CPM to milliSieverts/hr
+
+	Parameters:
+	cpm 	(int): Counts per minute
+
+	Returns the measurement in milliSieverts/hr
+	as a string with units.
+	"""
+	mSvPerHr = cpm * 1.0 / 350000
+	return str(mSvPerHr) + " mSv/hr"
+
+def CPMToBq(cpm):
+	"""
+	Converts from CPM to Becquerel
+
+	Parameters:
+	cpm 	(int): Counts per minute
+
+	Returns the measurement in Becquerels
+	as a string with units.
+	"""
+	cps = cpm / 60.0
+	return str(cps) + " Bq"
+
+def CPMToRemPerHr(cpm):
+	"""
+	Converts from CPM to rem/hr
+
+	Parameters:
+	cpm 	(int): Counts per minute
+
+	Returns the measurement in rem/hr
+	as a string with units
+	"""
+	# Convert from CPM to mSv/hr, then to Rem/hr
+	mSvPerHr = cpm * 1.0 / 350000
+	remPerHr = mSvPerHr * 0.1
+	return str(remPerHr) + " rem/hr"
+
 
 
 def calcRadColor(entry):
@@ -180,7 +231,7 @@ def calcAlpha(entry):
 
 	Returns a 2 digit hexadecimal string
 	"""
-	# If either validity flag is void, represent with 50% transparency
+	# If either validity flag is void, represent with 75% transparency
 	# Otherwise, the path should be fully opaque
 	if entry[4] == "V" or entry[8] == "V":
 		alpha = 64
