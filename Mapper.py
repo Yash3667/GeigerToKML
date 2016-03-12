@@ -7,6 +7,8 @@ global colorBlind
 # A base case
 colorBlind = False
 
+mu = unichr(956)
+
 def mapData(data):
 	"""
 	Segments the path into mini-paths of varying colors
@@ -63,7 +65,7 @@ def CPMTomSvPerHr(cpm):
 	as a string with units.
 	"""
 	uSvPerHr = cpm * 1.0 / 350
-	return str(uSvPerHr) + " \u03BCSv/hr"
+	return str(uSvPerHr) + " " + mu + "Sv/hr"
 
 def CPMToBq(cpm):
 	"""
@@ -91,7 +93,7 @@ def CPMToRemPerHr(cpm):
 	# Convert from CPM to microSv/hr, then to microRem/hr
 	uSvPerHr = cpm * 1.0 / 350
 	uRemPerHr = uSvPerHr * 0.1
-	return str(uRemPerHr) + " \u03BCRem/hr"
+	return str(uRemPerHr) + " " + mu + "Rem/hr"
 
 
 
