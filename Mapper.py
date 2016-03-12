@@ -43,27 +43,27 @@ def mapData(data):
 				break
 
 		# Add units and equivalent measurements
-		mSvPerHr = CPMTomSvPerHr(int(radlvl))
+		uSvPerHr = CPMTomSvPerHr(int(radlvl))
 		Bq = CPMToBq(int(radlvl))
-		remPerHr = CPMToRemPerHr(int(radlvl))
+		uRemPerHr = CPMToRemPerHr(int(radlvl))
 		radlvl = str(radlvl) + " CPM"
-		radlvl = (radlvl, mSvPerHr, Bq, remPerHr)
+		radlvl = (radlvl, uSvPerHr, Bq, uRemPerHr)
 
 		# Send the path off to be added to the KML
 		KMLWriter.makeLine(path, radColor, radlvl)
 
 def CPMTomSvPerHr(cpm):
 	"""
-	Converts from CPM to milliSieverts/hr
+	Converts from CPM to microSieverts/hr
 
 	Parameters:
 	cpm 	(int): Counts per minute
 
-	Returns the measurement in milliSieverts/hr
+	Returns the measurement in microSieverts/hr
 	as a string with units.
 	"""
-	mSvPerHr = int(cpm) * 1.0 / 350000
-	return str(mSvPerHr) + " mSv/hr"
+	uSvPerHr = cpm * 1.0 / 350
+	return str(uSvPerHr) + " \u03BCSv/hr"
 
 def CPMToBq(cpm):
 	"""
@@ -80,18 +80,18 @@ def CPMToBq(cpm):
 
 def CPMToRemPerHr(cpm):
 	"""
-	Converts from CPM to rem/hr
+	Converts from CPM to microRem/hr
 
 	Parameters:
 	cpm 	(int): Counts per minute
 
-	Returns the measurement in rem/hr
+	Returns the measurement in microRem/hr
 	as a string with units
 	"""
-	# Convert from CPM to mSv/hr, then to Rem/hr
-	mSvPerHr = cpm * 1.0 / 350000
-	remPerHr = mSvPerHr * 0.1
-	return str(remPerHr) + " rem/hr"
+	# Convert from CPM to microSv/hr, then to microRem/hr
+	uSvPerHr = cpm * 1.0 / 350
+	uRemPerHr = uSvPerHr * 0.1
+	return str(uRemPerHr) + " \u03BCRem/hr"
 
 
 
