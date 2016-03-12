@@ -43,9 +43,9 @@ def mapData(data):
 				break
 
 		# Add units and equivalent measurements
-		mSvPerHr = CPMTomSvPerHr(radlvl)
-		Bq = CPMToBq(radlvl)
-		remPerHr = CPMToRemPerHr(radlvl)
+		mSvPerHr = CPMTomSvPerHr(int(radlvl))
+		Bq = CPMToBq(int(radlvl))
+		remPerHr = CPMToRemPerHr(int(radlvl))
 		radlvl = str(radlvl) + " CPM"
 		radlvl = (radlvl, mSvPerHr, Bq, remPerHr)
 
@@ -62,7 +62,7 @@ def CPMTomSvPerHr(cpm):
 	Returns the measurement in milliSieverts/hr
 	as a string with units.
 	"""
-	mSvPerHr = cpm * 1.0 / 350000
+	mSvPerHr = int(cpm) * 1.0 / 350000
 	return str(mSvPerHr) + " mSv/hr"
 
 def CPMToBq(cpm):
@@ -139,7 +139,7 @@ def calcRed(radlvl):
 		if radlvl <= trivialCPM:
 			red = 0
 		elif radlvl <= mediumCPM:
-			x = radlvl - trivialCPM	
+			x = radlvl - trivialCPM
 			theta = x * radians(180)/ (mediumCPM - trivialCPM)
 			red = 191 - 64 * cos(theta)
 		elif radlvl <= highCPM:

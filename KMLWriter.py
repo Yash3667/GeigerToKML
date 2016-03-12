@@ -21,7 +21,7 @@ def initKML(widthLength = "10"):
 
 
 
-def makeLine(points,color,radLevel):
+def makeLine(points,color,radLevels):
     """
     This is the main function of the module
 
@@ -29,7 +29,8 @@ def makeLine(points,color,radLevel):
     points      (list): a list of length 7 lists
                         who's elements are detailed in Parser.py
     color     (string): a abgr hex code
-    radLevel  (string): the radiation level for the path as a string
+    radLevels (tuple): a tuple of strings of the radiation level
+                       for the path in different uits
     """
     #this creates the style tag that will give the LineString it's color and width
     Style = ET.SubElement(Document, "Style", id=color)
@@ -45,9 +46,15 @@ def makeLine(points,color,radLevel):
     styleUrl = ET.SubElement(Placemark,"styleUrl")
     styleUrl.text = "#"+color
     name = ET.SubElement(Placemark,"name")
-    name.text = radLevel+"cpm"
+    name.text = radLevels[0]
     description = ET.SubElement(Placemark,"description")
-    description.text = str(points[1][0]).replace("T","\n").replace("Z","")
+    des = ""
+    for elem in radLevels:
+        if elem != radLevels[0]:
+            des = des+elem+"\n"
+    des = des+"\n"+str(points[1][0]).replace("T","\n").replace("Z","")
+    description.text = des
+
 
     #This creates the LineString, tessellates it, and initializes the coordinates tag
     LineString = ET.SubElement(Placemark, "LineString")
