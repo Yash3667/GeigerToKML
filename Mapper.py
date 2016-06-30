@@ -1,7 +1,10 @@
 from math import *
+import re
+import datetime
 
 from Milestones import *
 import KMLWriter
+
 
 global colorBlind
 # A base case
@@ -28,6 +31,11 @@ def mapData(data):
 		del data[0]
 		path.append(data[0])
 
+		# Verify that the points are from a consecutive time interval
+		if convertToEpoch(path[1][0]) - convertToEpoch(path[0][0]) != 5:
+			# If not, continue from the next possible path
+			continue
+
 		# Determine the radiation level of the path in CPM
 		radlvl = data[0][1]
 
@@ -53,6 +61,24 @@ def mapData(data):
 
 		# Send the path off to be added to the KML
 		KMLWriter.makeLine(path, radColor, radlvl)
+
+def convertToEpoch(time):
+    """
+    Converts the UTC time given in the log to epoch time.
+
+    Parameters
+    time    (String): UTC time according to the log
+    """
+    # datetime of the epoch
+    epoch = datetime.datetime(1970, 1, 1, 0, 0, 0)
+
+    # Split the given time and create a datetime
+    utcSplit = re.split('\D', time)
+    for i in range(0, 6):
+    	utcSplit[i] = int(utcSplit[i])
+    utcTime = datetime.datetime(utcSplit[0], utcSplit[1], utcSplit[2], utcSplit[3],  utcSplit[4], utcSplit[5])
+
+    return (utcTime - epoch).total_seconds()
 
 def CPMTomSvPerHr(cpm):
 	"""
