@@ -33,8 +33,17 @@ def mapData(data):
 
 		# Verify that the points are from a consecutive time interval
 		if compareTimes(path[0][0], path[1][0]) != 5:
+			#print "Skip: Invalid Time"
 			# If not, continue from the next possible path
 			continue
+
+		# Verify GPS validity flag
+		if path[0][8] == 'A' or path[1][8] == 'A':
+			# If invalid, continue from next possible path
+			#print "Skip: Invalid Flag"
+			continue
+
+		#print "Continuing"
 
 		# Determine the radiation level of the path in CPM
 		radlvl = data[0][1]
@@ -46,7 +55,7 @@ def mapData(data):
 
 		# Add additional points to the path, if applicable
 		while len(data) > 1:
-			if data[1][0] == radlvl:
+			if data[0][1] == radlvl and data[0][8] != 'A':
 				del data[0]
 				path.append(data[0])
 			else:
@@ -83,6 +92,7 @@ def compareTimes(t1, t2):
     	utcSplit2[i] = int(utcSplit2[i])
     utcTime2 = datetime.datetime(utcSplit2[0], utcSplit2[1], utcSplit2[2], utcSplit2[3],  utcSplit2[4], utcSplit2[5])
 
+    #print t2 + ' - ' + t1 + ' = ' + str((utcTime2 - utcTime1).total_seconds()) + " seconds"
     return (utcTime2 - utcTime1).total_seconds()
 
 def CPMTomSvPerHr(cpm):
@@ -264,9 +274,9 @@ def calcAlpha(entry):
 
 	Returns a 2 digit hexadecimal string
 	"""
-	# If either validity flag is void, represent with 75% transparency
+	# If radcount validity flag is invalid, represent with 75% transparency
 	# Otherwise, the path should be fully opaque
-	if entry[4] == "V" or entry[8] == "V":
+	if entry[4] == "A":
 		alpha = 64
 	else:
 		alpha = 255
