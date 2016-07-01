@@ -33,17 +33,14 @@ def mapData(data):
 
 		# Verify that the points are from a consecutive time interval
 		if compareTimes(path[0][0], path[1][0]) != 5:
-			#print "Skip: Invalid Time"
 			# If not, continue from the next possible path
 			continue
 
 		# Verify GPS validity flag
 		if path[0][8] == 'V' or path[1][8] == 'V':
 			# If invalid, continue from next possible path
-			#print "Skip: Invalid Flag"
 			continue
 
-		#print "Continuing"
 
 		# Determine the radiation level of the path in CPM
 		radlvl = data[0][1]
@@ -92,7 +89,6 @@ def compareTimes(t1, t2):
     	utcSplit2[i] = int(utcSplit2[i])
     utcTime2 = datetime.datetime(utcSplit2[0], utcSplit2[1], utcSplit2[2], utcSplit2[3],  utcSplit2[4], utcSplit2[5])
 
-    #print t2 + ' - ' + t1 + ' = ' + str((utcTime2 - utcTime1).total_seconds()) + " seconds"
     return (utcTime2 - utcTime1).total_seconds()
 
 def CPMTomSvPerHr(cpm):
