@@ -38,7 +38,7 @@ def mapData(data):
 			continue
 
 		# Verify GPS validity flag
-		if path[0][8] == 'A' or path[1][8] == 'A':
+		if path[0][8] == 'V' or path[1][8] == 'V':
 			# If invalid, continue from next possible path
 			#print "Skip: Invalid Flag"
 			continue
@@ -55,7 +55,7 @@ def mapData(data):
 
 		# Add additional points to the path, if applicable
 		while len(data) > 1:
-			if data[0][1] == radlvl and data[0][8] != 'A':
+			if data[0][1] == radlvl and data[0][8] != 'V':
 				del data[0]
 				path.append(data[0])
 			else:
@@ -276,7 +276,7 @@ def calcAlpha(entry):
 	"""
 	# If radcount validity flag is invalid, represent with 75% transparency
 	# Otherwise, the path should be fully opaque
-	if entry[4] == "A":
+	if entry[4] == "V":
 		alpha = 64
 	else:
 		alpha = 255
