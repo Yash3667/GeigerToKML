@@ -32,7 +32,7 @@ def mapData(data):
 		path.append(data[0])
 
 		# Verify that the points are from a consecutive time interval
-		if compareTimes(path[1][0], path[1][0]) != 5:
+		if compareTimes(path[0][0], path[1][0]) != 5:
 			# If not, continue from the next possible path
 			continue
 
@@ -82,7 +82,6 @@ def compareTimes(t1, t2):
     for i in range(0, 6):
     	utcSplit2[i] = int(utcSplit2[i])
     utcTime2 = datetime.datetime(utcSplit2[0], utcSplit2[1], utcSplit2[2], utcSplit2[3],  utcSplit2[4], utcSplit2[5])
-
 
     return (utcTime2 - utcTime1).total_seconds()
 
