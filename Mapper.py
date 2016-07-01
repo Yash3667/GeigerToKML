@@ -32,7 +32,7 @@ def mapData(data):
 		path.append(data[0])
 
 		# Verify that the points are from a consecutive time interval
-		if convertToEpoch(path[1][0]) - convertToEpoch(path[0][0]) != 5:
+		if compareTimes(path[1][0], path[1][0]) != 5:
 			# If not, continue from the next possible path
 			continue
 
@@ -62,23 +62,29 @@ def mapData(data):
 		# Send the path off to be added to the KML
 		KMLWriter.makeLine(path, radColor, radlvl)
 
-def convertToEpoch(time):
+def compareTimes(t1, t2):
     """
-    Converts the UTC time given in the log to epoch time.
+    Computes the difference in seconds of two times given in the
+    log.
 
     Parameters
-    time    (String): UTC time according to the log
+    t1	(String): First UTC time according to the log
+    t2	(String): Second UTC time according the log
     """
-    # datetime of the epoch
-    epoch = datetime.datetime(1970, 1, 1, 0, 0, 0)
 
-    # Split the given time and create a datetime
-    utcSplit = re.split('\D', time)
+    # Split the given times and create timedates for each of them
+    utcSplit1 = re.split('\D', t1)
     for i in range(0, 6):
-    	utcSplit[i] = int(utcSplit[i])
-    utcTime = datetime.datetime(utcSplit[0], utcSplit[1], utcSplit[2], utcSplit[3],  utcSplit[4], utcSplit[5])
+    	utcSplit1[i] = int(utcSplit1[i])
+    utcTime1 = datetime.datetime(utcSplit1[0], utcSplit1[1], utcSplit1[2], utcSplit1[3],  utcSplit1[4], utcSplit1[5])
 
-    return (utcTime - epoch).total_seconds()
+    utcSplit2 = re.split('\D', t2)
+    for i in range(0, 6):
+    	utcSplit2[i] = int(utcSplit2[i])
+    utcTime2 = datetime.datetime(utcSplit2[0], utcSplit2[1], utcSplit2[2], utcSplit2[3],  utcSplit2[4], utcSplit2[5])
+
+
+    return (utcTime2 - utcTime1).total_seconds()
 
 def CPMTomSvPerHr(cpm):
 	"""
