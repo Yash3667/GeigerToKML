@@ -47,6 +47,8 @@ def printUsage():
     print
     print "If Output File name is not specified, it takes"
     print "on the name of the Log File (the path for the log file is not followed)"
+    print
+    print "To run on multiple files, concatenate the files and run as normal."
     exit(0)
 
 """ Script Execution """
